@@ -3,9 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { getMesas } from "../../services/mesa-service";
 import TableBarTwoToneIcon from "@mui/icons-material/TableBarTwoTone";
 import { green } from "@mui/material/colors";
-import { renderToStaticMarkup } from "react-dom/server";
-import { divIcon } from "leaflet";
-import { Marker, Popup } from "react-leaflet";
+import { IconButton } from "@mui/material";
+import { Popup, Grid } from "semantic-ui-react";
 //import "./Mesa.scss";
 
 export default function ListMesas() {
@@ -14,40 +13,32 @@ export default function ListMesas() {
   const [icon, setIcon] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const ref = useRef();
-  const toggleTooltip = () => ref.current.toggle();
 
   useEffect(() => {
     getData();
   }, []);
 
   const getData = async () => {
-    const response = await getMesas();
-    setMesas(response);
-    console.log(mesas);
+    const mesasDisponibles = await getMesas();
+    setMesas(mesasDisponibles);
+    console.log(mesasDisponibles);
   };
 
-  // const markers = <Marker icon={iconMesa}></Marker>;
-
-  // const iconMesa = (
-  //   <div>
-  //     <TableBarTwoToneIcon sx={{ fontSize: 130, color: green[500] }}>
-  //
-  //     </TableBarTwoToneIcon>
-  //   </div>
-  // );
-
-  // const customMesaIcon = divIcon({
-  //   html: iconMesa,
-  //   className: "dummy",
-  // });
-  // const popup = (
-
-  // );
-
-  return (
-    <div>
-      <TableBarTwoToneIcon sx={{ fontSize: 130, color: green[500] }} />
-    </div>
+  const PopupExamplePinned = () => (
+    <Grid.Column>
+      <Popup
+        content={mesas && mesas[0] && mesas[0].nroMesa}
+        on="click"
+        position="top left"
+        trigger={
+          <IconButton>
+            <TableBarTwoToneIcon sx={{ fontSize: 130, color: green[500] }} />
+          </IconButton>
+        }
+      />
+    </Grid.Column>
   );
+
+  //<div <div class="ui top left popup transition visible" style="left: auto; right: auto; position: initial;"><div class="content">I will not flip!</div></div></div>
+  return <PopupExamplePinned />;
 }
