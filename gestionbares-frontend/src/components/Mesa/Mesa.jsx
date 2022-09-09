@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { getMesas } from "../../services/mesa-service";
-import TableBarTwoToneIcon from "@mui/icons-material/TableBarTwoTone";
-import { green } from "@mui/material/colors";
 import { IconButton } from "@mui/material";
 import { Popup, Grid } from "semantic-ui-react";
 //import "./Mesa.scss";
