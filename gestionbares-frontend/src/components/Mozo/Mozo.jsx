@@ -17,7 +17,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 export default function ListMozos() {
   const [mozos, setMozos] = useState([]);
@@ -33,9 +33,6 @@ export default function ListMozos() {
 
   return (
     <Stack alignItems={"center"}>
-      <IconButton>
-        <SvgComponentAgregar />
-      </IconButton>
       <TableContainer
         style={{ width: "500px", marginTop: "45px" }}
         component={Paper}
