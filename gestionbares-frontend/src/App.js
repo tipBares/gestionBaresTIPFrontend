@@ -6,7 +6,7 @@ import Mesa from "./components/Mesa";
 import Header from "./components/Header";
 import Mozo from "./components/Mozo";
 //import ProductoLista from "./components/ProductoLista";
-import ProductoLista from "./components/ProductoLista"
+import ProductoLista from "./components/ProductoLista";
 import FormProducto from "./components/FormProducto/FormProducto";
 import FormMozo from "./components/FormMozo/FormMozo";
 
