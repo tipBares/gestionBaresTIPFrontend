@@ -13,7 +13,11 @@ export default function ButtonAppBar() {
       <AppBar style={{ background: "#2E3B55" }} position="static">
         <Toolbar>
           <Grid item xs={2} md={4} lg={6} xl={8}>
-            <Button style={{ margin: "30px 60px " }} color="inherit">
+            <Button
+              href="/productos"
+              style={{ margin: "30px 60px " }}
+              color="inherit"
+            >
               Menú
             </Button>
           </Grid>
