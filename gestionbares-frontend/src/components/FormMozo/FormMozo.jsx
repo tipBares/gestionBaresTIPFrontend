@@ -49,7 +49,7 @@ export default function FormMozo(props) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <TextField
-              sx={{ width: 300 }}
+              sx={{ width: 300, marginTop: 2, marginBottom: 1 }}
               id="nombreid"
               type="text"
               label="Nombre"
@@ -65,7 +65,7 @@ export default function FormMozo(props) {
 
           <div>
             <TextField
-              sx={{ width: 300 }}
+              sx={{ width: 300, marginBottom: 1 }}
               id="apellidoid"
               type="text"
               label="Apellido"
@@ -105,7 +105,7 @@ export default function FormMozo(props) {
             type="submit"
             variant="contained"
             color="error"
-            sx={{ mt: "8px", mb: "4px", width: "300px" }}
+            sx={{ mt: "1px", mb: "4px", width: "300px" }}
             component={Link}
             to="/mozos"
           >
