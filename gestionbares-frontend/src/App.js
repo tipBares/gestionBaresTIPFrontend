@@ -4,6 +4,7 @@ import "./App.css";
 import Mesa from "./components/Mesa";
 import Header from "./components/Header";
 import Mozo from "./components/Mozo";
+import FormMozo from "./components/FormMozo/FormMozo";
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Mesa />} />
           <Route path="/mozos" element={<Mozo />} />
+          <Route path="/agregarMozo" element={<FormMozo />} />
+          <Route path="/editarMozo/:id" element={<FormMozo />} />
         </Routes>
       </BrowserRouter>
     </div>
