@@ -31,10 +31,51 @@ export async function createProducto(data) {
   return [];
 }
 
+export async function editProducto(id, producto) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/${id}/${producto.categoria}`,
+      method: "PUT",
+      data: producto,
+    });
+    Swal.fire({
+      title: "Hecho!",
+      text: "El producto ha sido editado correctamente",
+      icon: "success",
+      confirmButtonText: "Regresar",
+      timer: 1000,
+    }).then((result) => {
+      window.location = "/productos";
+    });
+    return response;
+  } catch (err) {
+    console.error(err);
+    Swal.fire({
+      title: "Error!",
+      text: "Error al editar el productos, corrobore los datos son correctos y vuelva a intentarlo",
+      icon: "error",
+      confirmButtonText: "Ok",
+    });
+  }
+}
+
 export async function getProductos(pag) {
   try {
     const response = await axios({
       url: `${baseUrl}/productos/${pag}`,
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
+export async function getProductoById(id) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/get/${id}`,
       method: "GET",
     });
     return response.data;

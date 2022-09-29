@@ -11,21 +11,22 @@ import FormProducto from "./components/FormProducto/FormProducto";
 import FormMozo from "./components/FormMozo/FormMozo";
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Mesa />} />
-          <Route path="/mozos" element={<Mozo />} />
-          <Route path="/productos" element={<ProductoLista />} />
-          <Route path="/agregarProducto" element={<FormProducto />} />
-          <Route path="/agregarMozo" element={<FormMozo />} />
-          <Route path="/editarMozo/:id" element={<FormMozo />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+	return (
+		<div className="App">
+			<Header />
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Mesa />} />
+					<Route path="/mozos" element={<Mozo />} />
+					<Route path="/productos" element={<ProductoLista />} />
+					<Route path="/agregarProducto" element={<FormProducto />} />
+					<Route path="/editarProducto/:id" element={<FormProducto />} />
+					<Route path="/agregarMozo" element={<FormMozo />} />
+					<Route path="/editarMozo/:id" element={<FormMozo />} />
+				</Routes>
+			</BrowserRouter>
+		</div>
+	);
 }
 
 export default App;

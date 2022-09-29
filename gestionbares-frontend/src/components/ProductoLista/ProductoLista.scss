@@ -12,3 +12,29 @@ table {
     margin-left:auto; 
     margin-right:auto;
   }
+.palabra {
+    //marginTop: "15px", marginRight: "30px"
+    margin-top: 15px;
+    margin-right: 30px;
+}  
+.p2 {
+    //height: 50px;
+    left: -10px;
+    right: 50px;
+    position: relative;
+    top: 10px;
+    // width: 150px;
+    color: rgb(1, 1, 1);
+  }
+.p3 {
+    left: 100px;
+}  
+
+.button {
+    position: absolute;
+    top:50%;
+    background-color:#ffffff;
+    color: #fff;
+    border:none;
+    border-radius:10px;
+  }
