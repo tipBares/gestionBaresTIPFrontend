@@ -2,10 +2,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export async function getMozos() {
+export async function getMozos(pag) {
   try {
     const response = await axios({
-      url: `${baseUrl}/Mozo/All`,
+      url: `${baseUrl}/mozos/${pag}`,
       method: "GET",
     });
     return response.data;
@@ -18,7 +18,7 @@ export async function getMozos() {
 export async function createMozo(data) {
   try {
     const response = await axios({
-      url: `${baseUrl}/Mozo`,
+      url: `${baseUrl}/mozos`,
       method: "POST",
       data: data,
     });
@@ -46,7 +46,7 @@ export async function createMozo(data) {
 export async function deleteMozo(id) {
   try {
     const response = await axios({
-      url: `${baseUrl}/Mozo/delete/${id}`,
+      url: `${baseUrl}/mozos/delete/${id}`,
       method: "DELETE",
     });
     Swal.fire({
@@ -74,7 +74,7 @@ export async function deleteMozo(id) {
 export async function editMozo(id, mozo) {
   try {
     const response = await axios({
-      url: `${baseUrl}/Mozo/${id}`,
+      url: `${baseUrl}/mozos/${id}`,
       method: "PUT",
       data: mozo,
     });
@@ -102,7 +102,7 @@ export async function editMozo(id, mozo) {
 export async function getMozoById(id) {
   try {
     const response = await axios({
-      url: `${baseUrl}/Mozo/get/${id}`,
+      url: `${baseUrl}/mozos/get/${id}`,
       method: "GET",
     });
     return response.data;
