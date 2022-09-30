@@ -1,8 +1,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { deleteMozo, getMozos } from "../../services/mozo-service";
+import {
+  deleteCategoria,
+  getCategorias,
+} from "../../services/categoria-service";
 import IconButton from "@mui/material/IconButton";
-import "./Mozo.scss";
+import "./Categoria.scss";
 import {
   SvgComponentEliminar,
   SvgComponentEditar,
@@ -20,30 +23,29 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
 import Pagination from "@mui/material/Pagination";
-
 import Grid from "@mui/material/Grid";
 
-export default function Mozos() {
+export default function Categorias() {
   const navigate = useNavigate();
 
-  const [mozos, setMozos] = useState([]);
-  const [mozosInfo, setMozosInfo] = useState();
+  const [categorias, setCategorias] = useState([]);
+  const [categoriasInfo, setCategoriasInfo] = useState();
 
   useEffect(() => {
     const getData = async () => {
-      const mozosDisponibles = await getMozos(0);
-      setMozos(mozosDisponibles.content);
-      setMozosInfo(mozosDisponibles);
-      console.log(mozosDisponibles);
+      const categoriasDisponibles = await getCategorias(0);
+      setCategorias(categoriasDisponibles.content);
+      setCategoriasInfo(categoriasDisponibles);
+      console.log(categoriasDisponibles);
     };
     getData();
   }, []);
 
   const handleChange = async (event, value) => {
     console.log(value, "Soy el valor");
-    const mozosDisponibles = await getMozos(value - 1);
-    setMozos(mozosDisponibles.content);
-    setMozosInfo(mozosDisponibles);
+    const categoriasDisponibles = await getCategorias(value - 1);
+    setCategorias(categoriasDisponibles.content);
+    setCategoriasInfo(categoriasDisponibles);
   };
 
   return (
@@ -53,25 +55,25 @@ export default function Mozos() {
           <Grid item xs={6}>
             <Grid item xs={6}>
               <Button
-                onClick={() => navigate("/agregarMozo")}
+                onClick={() => navigate("/agregarCategoria")}
                 sx={{
                   mt: "20px",
                   mb: "1px",
                   mr: "-120px",
-                  left: "-20px",
+                  left: "-9px",
                   width: "200px",
                   borderRadius: "30px",
                 }}
                 component={Paper}
               >
-                <h5 className="p2">AGREGAR MOZO</h5>
+                <h5 className="p2">AGREGAR CATEGORIA</h5>
                 <div>
                   <SvgComponentAgregar />
                 </div>
               </Button>
             </Grid>
             <TableContainer
-              style={{ width: "500px", marginTop: "25px" }}
+              style={{ width: "350px", marginTop: "25px" }}
               component={Paper}
             >
               <Table aria-label="simple table">
@@ -80,22 +82,15 @@ export default function Mozos() {
                     <TableCell className="celda">
                       <h5>NOMBRE</h5>
                     </TableCell>
-
-                    <TableCell className="celda">
-                      <h5>APELLIDO</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>NICK</h5>
-                    </TableCell>
                     <TableCell className="acciones">
                       <h5>ACCIONES</h5>
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {mozos.map((mozo) => (
+                  {categorias.map((categoria) => (
                     <TableRow
-                      key={mozo.nick}
+                      key={categoria.nombre}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell
@@ -104,18 +99,11 @@ export default function Mozos() {
                         component="th"
                         scope="row"
                       >
-                        {mozo.nombre}
+                        {categoria.nombre}
                       </TableCell>
-
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {mozo.apellido}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {mozo.nick}
-                      </TableCell>
-                      <TableHeaderCell>
-                        {buttonEdit(mozo, navigate)}
-                        {buttonDelete(mozo)}
+                      <TableHeaderCell sx={{ left: "10px" }}>
+                        {buttonEdit(categoria, navigate)}
+                        {buttonDelete(categoria)}
                       </TableHeaderCell>
                     </TableRow>
                   ))}
@@ -128,15 +116,15 @@ export default function Mozos() {
       <Pagination
         onChange={handleChange}
         shape="rounded"
-        count={mozosInfo?.totalPages}
+        count={categoriasInfo?.totalPages}
       />
     </Stack>
   );
 }
 
-function buttonDelete(mozo) {
+function buttonDelete(categoria) {
   let buttoon = (
-    <IconButton onClick={() => borrarMozo(mozo.id)}>
+    <IconButton onClick={() => borrarCategoria(categoria.id)}>
       <SvgComponentEliminar />
     </IconButton>
   );
@@ -144,10 +132,10 @@ function buttonDelete(mozo) {
   return buttoon;
 }
 
-function borrarMozo(id) {
+function borrarCategoria(id) {
   return Swal.fire({
     title: "Atencion!",
-    text: "Está a punto de eliminar el mozo de la base de datos",
+    text: "Está a punto de eliminar la categoria de la base de datos",
     icon: "warning",
     showCancelButton: true,
     cancelButtonColor: "blue",
@@ -156,24 +144,24 @@ function borrarMozo(id) {
     confirmButtonText: "Confirmar",
   }).then((result) => {
     if (result.isConfirmed) {
-      deleteMozo(id);
+      deleteCategoria(id);
     }
   });
 }
 
-function buttonEdit(mozo, navigate) {
+function buttonEdit(categoria, navigate) {
   let buttoon = (
-    <IconButton onClick={() => editarMozo(mozo.id, navigate)}>
+    <IconButton onClick={() => editarCategoria(categoria.id, navigate)}>
       <SvgComponentEditar />
     </IconButton>
   );
   return buttoon;
 }
 
-function editarMozo(id, navigate) {
+function editarCategoria(id, navigate) {
   return Swal.fire({
     title: "Atencion!",
-    text: "Está a punto de editar el mozo de la base de datos",
+    text: "Está a punto de editar la categoria de la base de datos",
     icon: "warning",
     showCancelButton: true,
     cancelButtonColor: "blue",
@@ -183,7 +171,7 @@ function editarMozo(id, navigate) {
   }).then((result) => {
     if (result.isConfirmed) {
       console.log(id);
-      let url = `/editarMozo/${id}`;
+      let url = `/editarCategoria/${id}`;
 
       return navigate(url);
     }

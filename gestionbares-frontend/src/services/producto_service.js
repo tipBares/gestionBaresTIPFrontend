@@ -13,11 +13,10 @@ export async function createProducto(data) {
       title: "Hecho!",
       text: "El producto se creó correctamente",
       icon: "success",
+      timer: 1000,
       confirmButtonText: "Cerrar",
     }).then((result) => {
-      if (result.isConfirmed) {
-        window.location = "/productos";
-      }
+      window.location = "/productos";
     });
     return response.data;
   } catch (err) {
@@ -95,11 +94,11 @@ export async function deleteProducto(id) {
       title: "Hecho!",
       text: "El producto se ha borrado correctamente, presioné Cerrar para actualizar",
       icon: "success",
+      timer: 1000,
+
       confirmButtonText: "Cerrar",
     }).then((result) => {
-      if (result.isConfirmed) {
-        window.location = window.location.href;
-      }
+      window.location = window.location.href;
     });
     return response;
   } catch (err) {
@@ -113,4 +112,3 @@ export async function deleteProducto(id) {
   }
   return [];
 }
-
