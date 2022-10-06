@@ -20,7 +20,7 @@ export default function FormProducto(props) {
 
 	const onSubmit = (data) => {
 		if (!id) {
-			createProducto({ nombre, precio, descripcion, categoria  });
+			createProducto({ nombre, precio, descripcion, categoria });
 		} else {
 			editProducto(id, { nombre, precio, descripcion, categoria });
 		}
@@ -39,8 +39,6 @@ export default function FormProducto(props) {
 			setPrecio(response.precio);
 			setDescripcion(response.descripcion);
 			setCategoria(response.categoria.id);
-
-			
 		};
 		const getCategoriasAux = async () => {
 			const responseCategorias = getCategorias();
