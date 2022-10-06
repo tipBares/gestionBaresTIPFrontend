@@ -9,9 +9,9 @@ import {
 import { getCategorias } from "../../services/categoria-service";
 import IconButton from "@mui/material/IconButton";
 import {
-	SvgComponentEliminar,
-	SvgComponentEditar,
-	SvgComponentAgregar,
+  SvgComponentEliminar,
+  SvgComponentEditar,
+  SvgComponentAgregar,
 } from "../../icons/abm";
 import "./ProductoLista.scss";
 import Swal from "sweetalert2";
@@ -31,6 +31,7 @@ import { Box, Button, Stack, TextField, Select, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductoLista() {
+
 	const navigate = useNavigate();
 	const [productos, setProductos] = useState([]);
 	const [productosInfo, setProductosInfo] = useState();
@@ -45,13 +46,14 @@ export default function ProductoLista() {
 		getCategoriasAux();
 	}, []);
 
-	const getData = async () => {
-		const productosDisponibles = await getProductos(0);
-		setProductosInfo(productosDisponibles);
-		setProductos(productosDisponibles.content);
+  const getData = async () => {
+    const productosDisponibles = await getProductos(0);
+    setProductosInfo(productosDisponibles);
+    setProductos(productosDisponibles.content);
 
-		console.log(productosDisponibles);
-	};
+    console.log(productosDisponibles);
+  };
+
 
 	const getCategoriasAux = async () => {
 		const responseCategorias = getCategorias();
@@ -231,55 +233,55 @@ export default function ProductoLista() {
 }
 
 function buttonDelete(producto) {
-	let button = (
-		<IconButton onClick={() => deleteProductoA(producto.id)}>
-			<SvgComponentEliminar />
-		</IconButton>
-	);
+  let button = (
+    <IconButton onClick={() => deleteProductoA(producto.id)}>
+      <SvgComponentEliminar />
+    </IconButton>
+  );
 
-	return button;
+  return button;
 }
 
 function deleteProductoA(id) {
-	return Swal.fire({
-		title: "Atencion!",
-		text: "Está a punto de eliminar el producto de la base de datos",
-		icon: "warning",
-		showCancelButton: true,
-		cancelButtonColor: "blue",
-		cancelButtonText: "Cancelar",
-		confirmButtonColor: "red",
-		confirmButtonText: "Confirmar",
-	}).then((result) => {
-		if (result.isConfirmed) {
-			deleteProducto(id);
-		}
-	});
+  return Swal.fire({
+    title: "Atencion!",
+    text: "Está a punto de eliminar el producto de la base de datos",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "blue",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "red",
+    confirmButtonText: "Confirmar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteProducto(id);
+    }
+  });
 }
 
 function buttonEdit(producto, navigate) {
-	let buttoon = (
-		<IconButton onClick={() => editarProducto(producto.id, navigate)}>
-			<SvgComponentEditar />
-		</IconButton>
-	);
-	return buttoon;
+  let buttoon = (
+    <IconButton onClick={() => editarProducto(producto.id, navigate)}>
+      <SvgComponentEditar />
+    </IconButton>
+  );
+  return buttoon;
 }
 
 function editarProducto(id, navigate) {
-	return Swal.fire({
-		title: "Atencion!",
-		text: "Está a punto de editar el producto de la base de datos",
-		icon: "warning",
-		showCancelButton: true,
-		cancelButtonColor: "blue",
-		cancelButtonText: "Cancelar",
-		confirmButtonColor: "red",
-		confirmButtonText: "Confirmar",
-	}).then((result) => {
-		if (result.isConfirmed) {
-			let url = `/editarProducto/${id}`;
-			return navigate(url);
-		}
-	});
+  return Swal.fire({
+    title: "Atencion!",
+    text: "Está a punto de editar el producto de la base de datos",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "blue",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "red",
+    confirmButtonText: "Confirmar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let url = `/editarProducto/${id}`;
+      return navigate(url);
+    }
+  });
 }

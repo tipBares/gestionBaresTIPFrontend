@@ -1,35 +1,36 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Box, Button, TextField } from "@mui/material";
 import React from "react";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
-import "./FormMozo.scss";
-import { createMozo, editMozo, getMozoById } from "../../services/mozo-service";
+import "./FormCategoria.scss";
+import {
+  createCategoria,
+  editCategoria,
+  getCategoriaById,
+} from "../../services/categoria-service";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function FormMozo(props) {
+export default function FormCategoria(props) {
+  const navigate = useNavigate();
   let { id } = useParams();
   const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     if (!id) {
-      createMozo({ nombre, apellido, nick });
+      createCategoria({ nombre });
     } else {
-      editMozo(id, { nombre, apellido, nick });
+      editCategoria(id, { nombre });
     }
   };
 
   const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [nick, setNick] = useState("");
 
   useEffect(() => {
     const getData = async () => {
-      const response = await getMozoById(id);
+      const response = await getCategoriaById(id);
       setNombre(response.nombre);
-      setApellido(response.apellido);
-      setNick(response.nick);
     };
     if (id) {
       getData();
@@ -38,8 +39,8 @@ export default function FormMozo(props) {
 
   return (
     <Stack style={{ marginTop: "100px" }} alignItems={"center"}>
-      <div className="milky">{id ? "Editar Mozo" : "Nuevo Mozo"}</div>
-      <Box width={"500px"} height={"280px"} component={Paper}>
+      <div className="milky">{id ? "Editar Categoria" : "Nueva categoria"}</div>
+      <Box width={"500px"} height={"180px"} component={Paper}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <TextField
@@ -52,37 +53,6 @@ export default function FormMozo(props) {
               {...register("nombre", {
                 onChange: (event) => {
                   setNombre(event.target.value);
-                },
-              })}
-            ></TextField>
-          </div>
-
-          <div>
-            <TextField
-              sx={{ width: 300, marginBottom: 1 }}
-              id="apellidoid"
-              type="text"
-              label="Apellido"
-              value={apellido}
-              required
-              {...register("apellido", {
-                onChange: (event) => {
-                  setApellido(event.target.value);
-                },
-              })}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              sx={{ width: 300 }}
-              id="nickid"
-              type="text"
-              label="Nick"
-              value={nick}
-              required
-              {...register("nick", {
-                onChange: (event) => {
-                  setNick(event.target.value);
                 },
               })}
             ></TextField>
@@ -100,8 +70,7 @@ export default function FormMozo(props) {
             variant="contained"
             color="error"
             sx={{ mt: "1px", mb: "4px", width: "300px" }}
-            component={Link}
-            to="/mozos"
+            onClick={() => navigate("/categorias")}
           >
             Cancelar
           </Button>
