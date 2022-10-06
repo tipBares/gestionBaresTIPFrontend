@@ -1,6 +1,12 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { getProductos, deleteProducto } from "../../services/producto_service";
+import {
+	getProductos,
+	deleteProducto,
+	getProductoByName,
+	getProductoByCategoria,
+} from "../../services/producto_service";
+import { getCategorias } from "../../services/categoria-service";
 import IconButton from "@mui/material/IconButton";
 import {
 	SvgComponentEliminar,
@@ -9,8 +15,8 @@ import {
 } from "../../icons/abm";
 import "./ProductoLista.scss";
 import Swal from "sweetalert2";
-import Buscador from "../BuscadorProducto/Buscador";
 import { TableHeaderCell } from "semantic-ui-react";
+import { useForm } from "react-hook-form";
 //tabla basica
 import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
@@ -21,16 +27,22 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import { Box, Button, Stack } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Box, Button, Stack, TextField, Select, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductoLista() {
 	const navigate = useNavigate();
 	const [productos, setProductos] = useState([]);
 	const [productosInfo, setProductosInfo] = useState();
+	const [nombre, setNombre] = useState("");
+	const [categorias, setCategorias] = useState([]);
+	const [categoria, setCategoria] = useState(0);
+
+	const { register, handleSubmit } = useForm();
 
 	useEffect(() => {
 		getData();
+		getCategoriasAux();
 	}, []);
 
 	const getData = async () => {
@@ -41,11 +53,63 @@ export default function ProductoLista() {
 		console.log(productosDisponibles);
 	};
 
+	const getCategoriasAux = async () => {
+		const responseCategorias = getCategorias();
+		const categorias = await responseCategorias;
+		setCategorias(categorias);
+	};
+
 	const handleChange = async (event, value) => {
-		console.log(value, "Soy el valor");
-		const productosDisponibles = await getProductos(value - 1);
-		setProductosInfo(productosDisponibles);
-		setProductos(productosDisponibles.content);
+		if (nombre && nombre.length > 0) {
+			const productosDisponibles = await getProductoByName(nombre, value - 1);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		} else if (categoria!==0) {
+			const productosDisponibles = await getProductoByCategoria(
+				categoria,
+				value - 1
+			);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		} else {
+			const productosDisponibles = await getProductos(value - 1);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		}
+	};
+
+	const handleBuscarNombre = async (event) => {
+		if (event.target.value && event.target.value.length > 0) {
+			setNombre(event.target.value);
+			const productosDisponibles = await getProductoByName(
+				event.target.value,
+				0
+			);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		} else {
+			setNombre("");
+			const productosDisponibles = await getProductos(0);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		}
+	};
+
+	const handleBuscarCategoria = async (event) => {
+		if (event.target) {
+			setCategoria(event.target.value);
+			const productosDisponibles = await getProductoByCategoria(
+				event.target.value,
+				0
+			);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		} else {
+			setCategoria(0);
+			const productosDisponibles = await getProductos(0);
+			setProductosInfo(productosDisponibles);
+			setProductos(productosDisponibles.content);
+		}
 	};
 
 	return (
@@ -72,6 +136,31 @@ export default function ProductoLista() {
 								</div>
 							</Button>
 						</Grid>
+						<TextField
+							className="nombre"
+							label="Buscar lugar por nombre"
+							onChange={handleBuscarNombre}
+							value={nombre}
+							sx={{ width: 250 }}
+							style={{ margin: 12 }}
+						/>
+						<Select
+							sx={{ width: 300 }}
+							required
+							{...register("categoria")}
+							onChange={handleBuscarCategoria}
+							placeholder="Categoria"
+							labelId="Categoria-label"
+							label="Categoria"
+							value={categoria}
+						>
+							{categorias.map(({ nombre, id }) => (
+								<MenuItem key={id} value={id}>
+									{`${nombre}`}
+									{/* {<FontAwesomeIcon icon={icon} />} */}
+								</MenuItem>
+							))}
+						</Select>
 						<TableContainer
 							style={{ width: "600px", marginTop: "45px" }}
 							component={Paper}
@@ -134,6 +223,7 @@ export default function ProductoLista() {
 					onChange={handleChange}
 					shape="rounded"
 					count={productosInfo?.totalPages}
+					size="small"
 				/>
 			</Box>
 		</Stack>

@@ -31,6 +31,32 @@ export async function createProducto(data) {
   return [];
 }
 
+export async function getProductoByName(data, pag) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/nombre/${pag}?nombre=${data}`,
+      method: "GET"
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
+export async function getProductoByCategoria(id, pag) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/categoria/${id}/${pag}`,
+      method: "GET"
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
 export async function editProducto(id, producto) {
   try {
     const response = await axios({

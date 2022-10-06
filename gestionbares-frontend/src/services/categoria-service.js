@@ -4,7 +4,7 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 export async function getCategorias() {
     try {
       const response = await axios({
-        url: `${baseUrl}/categoria`,
+        url: `${baseUrl}/categorias`,
         method: "GET",
       });
       return response.data;
@@ -17,7 +17,7 @@ export async function getCategorias() {
   export async function getCategoriaById(id) {
     try {
       const response = await axios({
-        url: `${baseUrl}/categoria/${id}`,
+        url: `${baseUrl}/categorias/${id}`,
         method: "GET",
       });
       return response.data;
