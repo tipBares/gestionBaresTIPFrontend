@@ -11,6 +11,7 @@ import FormProducto from "./components/FormProducto/";
 import FormMozo from "./components/FormMozo/FormMozo";
 import Categoria from "./components/Categoria";
 import FormCategoria from "./components/FormCategoria";
+import FormTicket from "./components/FormTicket";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
           <Route path="/categorias" element={<Categoria />} />
           <Route path="/agregarCategoria" element={<FormCategoria />} />
           <Route path="/editarCategoria/:id" element={<FormCategoria />} />
+
+          <Route path="/abrirTicket" element={<FormTicket />} />
         </Routes>
       </BrowserRouter>
     </div>
