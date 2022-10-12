@@ -13,11 +13,11 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function FormCategoria(props) {
+export default function FormCategoria() {
   const navigate = useNavigate();
   let { id } = useParams();
   const { register, handleSubmit } = useForm();
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     if (!id) {
       createCategoria({ nombre });
     } else {
