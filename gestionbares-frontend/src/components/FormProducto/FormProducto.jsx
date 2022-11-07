@@ -11,7 +11,7 @@ import {
 	editProducto,
 	getProductoById,
 } from "../../services/producto_service";
-import { getCategorias } from "../../services/categoria-service";
+import { getCategoriasAll } from "../../services/categoria-service";
 
 export default function FormProducto(props) {
 	let { id } = useParams();
@@ -41,7 +41,7 @@ export default function FormProducto(props) {
 			setCategoria(response.categoria.id);
 		};
 		const getCategoriasAux = async () => {
-			const responseCategorias = getCategorias();
+			const responseCategorias = getCategoriasAll();
 			const categorias = await responseCategorias;
 			setCategorias(categorias);
 		};

@@ -31,7 +31,9 @@ export default function ButtonAppBar() {
             </Button>
           </Grid>
           <Grid item xs={2} md={4} lg={6} xl={8}>
-            <Button style={{ margin: "30px 80px " }} color="inherit">
+            <Button 
+            href="/historialTickets"
+            style={{ margin: "30px 80px " }} color="inherit">
               Historial Tickets
             </Button>
           </Grid>
