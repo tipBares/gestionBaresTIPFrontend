@@ -6,7 +6,7 @@ import {
 	getProductoByName,
 	getProductoByCategoria,
 } from "../../services/producto_service";
-import { getCategorias } from "../../services/categoria-service";
+import { getCategoriasAll } from "../../services/categoria-service";
 import IconButton from "@mui/material/IconButton";
 import {
   SvgComponentEliminar,
@@ -56,7 +56,7 @@ export default function ProductoLista() {
 
 
 	const getCategoriasAux = async () => {
-		const responseCategorias = getCategorias();
+		const responseCategorias = getCategoriasAll();
 		const categorias = await responseCategorias;
 		setCategorias(categorias);
 	};

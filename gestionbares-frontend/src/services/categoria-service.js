@@ -2,6 +2,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
+export async function getCategoriasAll() {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/categorias`,
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
 export async function getCategorias(pag) {
   try {
     const response = await axios({
