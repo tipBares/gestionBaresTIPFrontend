@@ -12,6 +12,7 @@ import FormMozo from "./components/FormMozo/FormMozo";
 import Categoria from "./components/Categoria";
 import FormCategoria from "./components/FormCategoria";
 import HistorialTickets from "./components/HistorialTickets";
+import FormTicket from "./components/FormTicket";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/agregarCategoria" element={<FormCategoria />} />
           <Route path="/editarCategoria/:id" element={<FormCategoria />} />
           <Route path="/historialTickets" element={<HistorialTickets/>} />
+          <Route path="/abrirTicket" element={<FormTicket />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,0 +1,44 @@
+.milky {
+    font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;;
+    text-transform: uppercase;
+    display: block;
+    font-size: 35px;
+    color: #2E3B55;
+    text-shadow: 0 5px 7px #c4b59d, 0px -2px 1px #fff;
+    font-weight: bold;
+    letter-spacing: 0px;
+    text-align: center;
+    //background: linear-gradient(to bottom, #ece4d9 0%,#e9dfd1 100%);
+    position: absolute;
+    padding: 30px 100px;
+    margin: auto;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 20px;
+  }
+
+.cursiv {
+  font-family: cursive;
+  font-size: x-large;
+}  
+
+.celda {
+  width: 100px;
+}
+.fila {
+  font-size: 2.5em
+}
+.acciones {
+  width: 100px;
+}
+
+table {
+  margin-left:auto; 
+  margin-right:auto;
+}
+.palabra {
+  //marginTop: "15px", marginRight: "30px"
+  margin-top: 15px;
+  margin-right: 30px;
+}  
