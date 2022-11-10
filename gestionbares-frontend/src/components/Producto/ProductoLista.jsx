@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import {
-	getProductos,
-	deleteProducto,
-	getProductoByName,
-	getProductoByCategoria,
+  getProductos,
+  deleteProducto,
+  getProductoByName,
+  getProductoByCategoria,
 } from "../../services/producto_service";
 import { getCategoriasAll } from "../../services/categoria-service";
 import IconButton from "@mui/material/IconButton";
@@ -26,25 +26,35 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import SearchIcon from "@mui/icons-material/Search";
 import Grid from "@mui/material/Grid";
-import { Box, Button, Stack, TextField, Select, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  InputAdornment,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductoLista() {
+  const navigate = useNavigate();
+  const [productos, setProductos] = useState([]);
+  const [productosInfo, setProductosInfo] = useState();
+  const [nombre, setNombre] = useState("");
+  const [categorias, setCategorias] = useState([]);
+  const [categoria, setCategoria] = useState("");
 
-	const navigate = useNavigate();
-	const [productos, setProductos] = useState([]);
-	const [productosInfo, setProductosInfo] = useState();
-	const [nombre, setNombre] = useState("");
-	const [categorias, setCategorias] = useState([]);
-	const [categoria, setCategoria] = useState(0);
+  const { register, handleSubmit } = useForm();
 
-	const { register, handleSubmit } = useForm();
-
-	useEffect(() => {
-		getData();
-		getCategoriasAux();
-	}, []);
+  useEffect(() => {
+    getData();
+    getCategoriasAux();
+  }, []);
 
   const getData = async () => {
     const productosDisponibles = await getProductos(0);
@@ -54,182 +64,222 @@ export default function ProductoLista() {
     console.log(productosDisponibles);
   };
 
+  const getCategoriasAux = async () => {
+    const responseCategorias = getCategoriasAll();
+    const categorias = await responseCategorias;
+    setCategorias(categorias);
+  };
 
-	const getCategoriasAux = async () => {
-		const responseCategorias = getCategoriasAll();
-		const categorias = await responseCategorias;
-		setCategorias(categorias);
-	};
+  const handleChange = async (event, value) => {
+    if (nombre && nombre.length > 0) {
+      const productosDisponibles = await getProductoByName(nombre, value - 1);
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    } else if (categoria !== 0) {
+      const productosDisponibles = await getProductoByCategoria(
+        categoria,
+        value - 1
+      );
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    } else {
+      const productosDisponibles = await getProductos(value - 1);
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    }
+  };
 
-	const handleChange = async (event, value) => {
-		if (nombre && nombre.length > 0) {
-			const productosDisponibles = await getProductoByName(nombre, value - 1);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		} else if (categoria!==0) {
-			const productosDisponibles = await getProductoByCategoria(
-				categoria,
-				value - 1
-			);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		} else {
-			const productosDisponibles = await getProductos(value - 1);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		}
-	};
+  const handleBuscarNombre = async (event) => {
+    if (event.target.value && event.target.value.length > 0) {
+      setNombre(event.target.value);
+      const productosDisponibles = await getProductoByName(
+        event.target.value,
+        0
+      );
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    } else {
+      setNombre("");
+      const productosDisponibles = await getProductos(0);
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    }
+  };
 
-	const handleBuscarNombre = async (event) => {
-		if (event.target.value && event.target.value.length > 0) {
-			setNombre(event.target.value);
-			const productosDisponibles = await getProductoByName(
-				event.target.value,
-				0
-			);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		} else {
-			setNombre("");
-			const productosDisponibles = await getProductos(0);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		}
-	};
+  const handleBuscarCategoria = async (event) => {
+    if (event.target) {
+      setCategoria(event.target.value);
+      const productosDisponibles = await getProductoByCategoria(
+        event.target.value,
+        0
+      );
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    } else {
+      setCategoria(0);
+      const productosDisponibles = await getProductos(0);
+      setProductosInfo(productosDisponibles);
+      setProductos(productosDisponibles.content);
+    }
+  };
 
-	const handleBuscarCategoria = async (event) => {
-		if (event.target) {
-			setCategoria(event.target.value);
-			const productosDisponibles = await getProductoByCategoria(
-				event.target.value,
-				0
-			);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		} else {
-			setCategoria(0);
-			const productosDisponibles = await getProductos(0);
-			setProductosInfo(productosDisponibles);
-			setProductos(productosDisponibles.content);
-		}
-	};
+  return (
+    <Stack alignItems={"center"}>
+      <Box height={"auto"}>
+        <div>
+          <TextField
+            className="alinearizq"
+            label="​Buscar producto por nombre"
+            onChange={handleBuscarNombre}
+            value={nombre}
+            sx={{ width: 280 }}
+            style={{ margin: 12 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment>
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
-	return (
-		<Stack alignItems={"center"}>
-			<Box>
-				<Grid container>
-					<Grid item xs={6}>
-						<Grid item xs={6}>
-							<Button
-								onClick={() => navigate("/agregarProducto")}
-								sx={{
-									mt: "20px",
-									mb: "1px",
-									mr: "-120px",
-									left: "-20px",
-									width: "200px",
-									borderRadius: "30px",
-								}}
-								component={Paper}
-							>
-								<h5 className="p2">AGREGAR PRODUCTO</h5>
-								<div>
-									<SvgComponentAgregar />
-								</div>
-							</Button>
-						</Grid>
-						<TextField
-							className="nombre"
-							label="Buscar lugar por nombre"
-							onChange={handleBuscarNombre}
-							value={nombre}
-							sx={{ width: 250 }}
-							style={{ margin: 12 }}
-						/>
-						<Select
-							sx={{ width: 300 }}
-							required
-							{...register("categoria")}
-							onChange={handleBuscarCategoria}
-							placeholder="Categoria"
-							labelId="Categoria-label"
-							label="Categoria"
-							value={categoria}
-						>
-							{categorias.map(({ nombre, id }) => (
-								<MenuItem key={id} value={id}>
-									{`${nombre}`}
-									{/* {<FontAwesomeIcon icon={icon} />} */}
-								</MenuItem>
-							))}
-						</Select>
-						<TableContainer
-							style={{ width: "600px", marginTop: "45px" }}
-							component={Paper}
-						>
-							<Table aria-label="simple table">
-								<TableHead>
-									<TableRow>
-										<TableCell className="celda">
-											<h5>NOMBRE</h5>
-										</TableCell>
-										<TableCell className="celda">
-											<h5>PRECIO</h5>
-										</TableCell>
-										<TableCell className="celda">
-											<h5>DESCRIPCION</h5>
-										</TableCell>
-										<TableCell className="celda">
-											<h5>CATEGORIA</h5>
-										</TableCell>
-										<TableCell className="acciones">
-											<h5>ACCIONES</h5>
-										</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{productos.map((producto) => (
-										<TableRow
-											key={producto.nombre}
-											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-										>
-											<TableCell
-												sx={{ fontSize: "15px" }}
-												align="left"
-												component="th"
-												scope="row"
-											>
-												{producto.nombre}
-											</TableCell>
-											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{producto.precio}
-											</TableCell>
-											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{producto.descripcion}
-											</TableCell>
-											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{producto.categoria.nombre}
-											</TableCell>
-											<TableHeaderCell>
-												{buttonEdit(producto, navigate)}
-												{buttonDelete(producto)}
-											</TableHeaderCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</Grid>
-				</Grid>
-				<Pagination
-					onChange={handleChange}
-					shape="rounded"
-					count={productosInfo?.totalPages}
-					size="small"
-				/>
-			</Box>
-		</Stack>
-	);
+          <FormControl className="alinearder" sx={{ m: 1.4, width: 280 }}>
+            <InputLabel id="demo-simple-select-label">
+              Buscar por categoria
+            </InputLabel>
+            <Select
+              //sx={{ width: 280 }}
+              // placeholder="Type something here!"
+              {...register("categoria")}
+              onChange={handleBuscarCategoria}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={categoria}
+            >
+              <MenuItem disabled={"true"} value="">
+                Buscar por categoria
+              </MenuItem>
+              {categorias.map(({ nombre, id }) => (
+                <MenuItem key={id} value={id}>
+                  {`${nombre}`}
+                  {/* {<FontAwesomeIcon icon={icon} />} */}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+
+        {/* <Grid container>
+          <Grid item xs={6}>
+            <Grid item xs={6}> */}
+        <div>
+          <Button
+            className="alinearder"
+            onClick={() => navigate("/agregarProducto")}
+            sx={{
+              mt: "1px",
+              mb: "20px",
+              mr: "-120px",
+              right: "130px",
+              width: "280px",
+              borderRadius: "30px",
+            }}
+            component={Paper}
+          >
+            <h5 className="p2">AGREGAR PRODUCTO</h5>
+            <div>
+              <SvgComponentAgregar />
+            </div>
+          </Button>
+          <Button
+            className="alinearizq"
+            onClick={() => navigate("/categorias")}
+            sx={{
+              mt: "1px",
+              mb: "20px",
+              mr: "-120px",
+              left: "10px",
+              width: "282px",
+              borderRadius: "30px",
+            }}
+            component={Paper}
+          >
+            <h5 className="p2">AGREGAR CATEGORIA</h5>
+            <div>
+              <SvgComponentAgregar />
+            </div>
+          </Button>
+        </div>
+        {/* </Grid> */}
+        <TableContainer
+          style={{ width: "600px", marginTop: "45px" }}
+          component={Paper}
+        >
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell className="celda">
+                  <h5>NOMBRE</h5>
+                </TableCell>
+                <TableCell className="celda">
+                  <h5>PRECIO</h5>
+                </TableCell>
+                <TableCell className="celda">
+                  <h5>DESCRIPCION</h5>
+                </TableCell>
+                <TableCell className="celda">
+                  <h5>CATEGORIA</h5>
+                </TableCell>
+                <TableCell className="acciones">
+                  <h5>ACCIONES</h5>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {productos.map((producto) => (
+                <TableRow
+                  key={producto.nombre}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell
+                    sx={{ fontSize: "15px" }}
+                    align="left"
+                    component="th"
+                    scope="row"
+                  >
+                    {producto.nombre}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "15px" }} align="left">
+                    {producto.precio}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "15px" }} align="left">
+                    {producto.descripcion}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "15px" }} align="left">
+                    {producto.categoria.nombre}
+                  </TableCell>
+                  <TableHeaderCell>
+                    {buttonEdit(producto, navigate)}
+                    {buttonDelete(producto)}
+                  </TableHeaderCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* </Grid>
+        </Grid> */}
+        <Pagination
+          onChange={handleChange}
+          shape="rounded"
+          count={productosInfo?.totalPages}
+          size="small"
+        />
+      </Box>
+    </Stack>
+  );
 }
 
 function buttonDelete(producto) {

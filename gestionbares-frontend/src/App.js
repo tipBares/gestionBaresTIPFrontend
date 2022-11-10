@@ -30,8 +30,10 @@ function App() {
           <Route path="/categorias" element={<Categoria />} />
           <Route path="/agregarCategoria" element={<FormCategoria />} />
           <Route path="/editarCategoria/:id" element={<FormCategoria />} />
-          <Route path="/historialTickets" element={<HistorialTickets/>} />
+          <Route path="/historialTickets" element={<HistorialTickets />} />
           <Route path="/abrirTicket" element={<FormTicket />} />
+
+          <Route path="/abrirTicket/:id" element={<FormTicket />} />
         </Routes>
       </BrowserRouter>
     </div>

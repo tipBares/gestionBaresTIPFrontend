@@ -67,3 +67,20 @@ export const SvgComponentMesa = (props) => (
     />
   </svg>
 );
+
+export const SvgComponentAjustes = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
+    width={24}
+    height={24}
+    {...props}
+  >
+    <image
+      xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJjSURBVEhLtVY9bxNBEL0CARU9/4KfQYMQICpACimQnGAchECExDZ/gA4T8EkIQQSxCSKRjCko0pAqSUNCfAYaxJdERZO7+JS9YeY8c5n7sHFOYqSnO69237t9Mztra9QoO954xXFhogFw493eYx7OF3e2d45XujtPqh33Hg9ZlY5XF4HSG9PhYev6W7Neau99mVrxT/DQ8Li7AoeQ6DeREcqO+7LqeDa++yIw0USRtnFQ6Fv4G3F1EQyuPco0w6PcdV+JQBJCmMS1lvnBy7ODvpxfLSRaShILssgJWiC1k9Dzvi2LaMkyPgMhFMxuenB7rQdjzwCuPB8o8gtt+052xXJCCU0SCqbXd6G4HPwRkpO1Pk7XIRifT4sIKPFMb1lULVnkt1b9XqEJgV4oAoKLT4MYsYCqi+n7UXXchianL4+RL8AnfNbO2rB5ag58LZLcSallvjLtflQc76EWKC7t24Kon2/CYZ5qXZiHY2dscESA7FJzqYS3eCqf0P4hCuucMPvBiybTlxfbcISnR0EieiexxNM5wcMYnngh1aBqkcmTDbjPnKlAu7ZE4PKAhGcKTCsBRI35UnGuDh9FgMpXrYkQWlTteo+QOLJoJo9FLxQxWjTVNtuxpoj9Zk4ECDrJhQbYWiSVZHtIkiVSZbqxS/4btfBzYQEekO8HLtNBB+3m+56fEIlIBZdGOWi5WgXaMnKr0M0OQZ001exmsNlRdYXNTidUk7bMz8xmR6HbNXbU10kBQRYxYWi7TsZ/uXAkaCdIFF2ZiKZuJUQ2yXWe+8r816VP5Dx88Et/UOT722JZfwHwYcV2zJOOVQAAAABJRU5ErkJggg=="
+      width={18}
+      height={18}
+      transform="scale(1.33333)"
+    />
+  </svg>
+);
