@@ -34,7 +34,20 @@ export async function getProductoByName(data, pag) {
   try {
     const response = await axios({
       url: `${baseUrl}/productos/nombre/${pag}?nombre=${data}`,
-      method: "GET"
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
+export async function getProductoByNameAll(data) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/nombre/?nombre=${data}`,
+      method: "GET",
     });
     return response.data;
   } catch (err) {
@@ -47,7 +60,20 @@ export async function getProductoByCategoria(id, pag) {
   try {
     const response = await axios({
       url: `${baseUrl}/productos/categoria/${id}/${pag}`,
-      method: "GET"
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
+export async function getProductoByCategoriaAll(id) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productos/categoria/${id}`,
+      method: "GET",
     });
     return response.data;
   } catch (err) {
@@ -88,6 +114,19 @@ export async function getProductos(pag) {
   try {
     const response = await axios({
       url: `${baseUrl}/productos/${pag}`,
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
+
+export async function getProductosAll() {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/productoAll`,
       method: "GET",
     });
     return response.data;

@@ -14,6 +14,18 @@ export async function getMozos(pag) {
   }
   return [];
 }
+export async function getMozosAll() {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/mozos`,
+      method: "GET",
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+  return [];
+}
 
 export async function createMozo(data) {
   try {

@@ -66,7 +66,7 @@ export default function Categorias() {
                 }}
                 component={Paper}
               >
-                <h5 className="p2">AGREGAR CATEGORIA</h5>
+                <h5 className="p2">CREAR CATEGORIA</h5>
                 <div>
                   <SvgComponentAgregar />
                 </div>
