@@ -9,6 +9,7 @@ import {
   Button,
   ButtonGroup,
   Collapse,
+  createFilterOptions,
   FormControl,
   IconButton,
   MenuItem,
@@ -48,6 +49,10 @@ import {
   applyDiscount,
   generarImporteTotal,
   updateMetodoDePago,
+  deleteTicketProducto,
+  alertaAnimada,
+  updateMesa,
+  guardarTicket,
 } from "../../services/ticket-service";
 import {
   getCategorias,
@@ -65,10 +70,10 @@ import {
 } from "../../services/producto_service";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Label, TableHeaderCell, TextArea } from "semantic-ui-react";
+import { Label, StepTitle, TableHeaderCell, TextArea } from "semantic-ui-react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { getMesaById } from "../../services/mesa-service";
+import { getMesaById, getMesas } from "../../services/mesa-service";
 import { getMozos, getMozosAll } from "../../services/mozo-service";
 
 const blue = {
@@ -79,6 +84,11 @@ const grey = {
   300: "#afb8c1",
   900: "#24292f",
 };
+
+// let notification = new Notification(StepTitle, createFilterOptions);
+// setTimeout(() => {
+//   notification.close();
+// }, 4000);
 
 const StyledBadge = styled(BadgeUnstyled)(
   ({ theme }) => `
@@ -173,16 +183,29 @@ export default function FormTicket() {
   let { id } = useParams();
   const { register, handleSubmit, reset } = useForm();
   const [idTicket, setIdTicket] = useState();
-  const [mesa, setMesa] = useState();
+  const [mesas, setMesas] = useState([]);
+  const [mesa, setMesa] = useState({});
   console.log("idTicket" + idTicket);
   const [idProducto, setIdProducto] = useState();
   const [cantidad, setCantidad] = useState(0);
   const [mozos, setMozos] = useState([]);
+
   const [mozo, setMozo] = useState({ nombre: "", apellido: "", nick: "" });
   console.log("const mozo 2", mozo);
   const [ticket, setTicket] = useState({});
   const [descuento, setDescuento] = useState();
   // const [metodoDePago, setMetodoDePago] = useState ({Efectivo});
+
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsAlertVisible(true);
+  };
+
+  setTimeout(() => {
+    setIsAlertVisible(false);
+  }, 3000);
+
   //no se si va
   console.log("const ticket 2", ticket);
   const onSubmit = async () => {
@@ -215,6 +238,12 @@ export default function FormTicket() {
     const responseMozos = getMozosAll();
     const mozos = await responseMozos;
     setMozos(mozos);
+  };
+
+  const getMesasAux = async () => {
+    const responseMesas = getMesas();
+    const mesas = await responseMesas;
+    setMesas(mesas);
   };
   const getDataMesa = async () => {
     console.log(id, "HOLAAAAAAAAAAAYYOUGIUG");
@@ -257,6 +286,7 @@ export default function FormTicket() {
     getDataTicket();
     getCategoriasAux();
     getMozosAux();
+    getMesasAux();
     getDataMesa();
   }, [id, idTicket]);
 
@@ -269,6 +299,7 @@ export default function FormTicket() {
 
   const handleChangeImporteTotal = async () => {
     await generarImporteTotal(idTicket);
+    getDataTicket();
   };
 
   const handleChangeDescuento = async (event, value) => {
@@ -293,7 +324,12 @@ export default function FormTicket() {
     console.log("paso handle change mozo 221: ", event.target.value);
     await updateMozoInTicket(idTicket, event.target.value);
     console.log("mozoId nuevo: ", event.target.value);
+    getDataTicket();
   };
+
+  // const optionsMozosPrueba() => {
+
+  // };
 
   //metodo pago prueba
 
@@ -359,6 +395,36 @@ export default function FormTicket() {
       setProductos(productosDisponibles);
     }
   };
+
+  const mostrarAlertaConfirmacionAuxiliar = () => {
+    Swal.fire({
+      title: "Creación exitosa",
+      icon: "success",
+      button: "Aceptar",
+    });
+  };
+
+  // const mostrarModalDetalles = () => {
+  //   setModalProductos(false);
+  //   handleOpen();
+  // };
+
+  const mesaSeleccionadaaaa = async (value) => {
+    console.log(value);
+
+    setMesa(mesas.find((mesa) => mesa.nroMesa == value));
+    // TODO ACA HAY QUE HACER LA PETICION A LA BASE DE DATOS
+    //estoy obteniendo todos los datos de la mesa
+    await updateMesa(idTicket, mesa.id);
+    console.log("id de mesa " + mesa.id);
+    console.log("id de tiket " + idTicket);
+  };
+
+  const Mesas = [];
+  mesas.map((option) => {
+    Mesas.push(`${option.nroMesa}`);
+    console.log(Mesas);
+  });
 
   return (
     <Stack style={{ marginTop: "100px" }} alignItems={"center"}>
@@ -434,13 +500,25 @@ export default function FormTicket() {
 
             <Button
               className="alinearder"
-              // onClick={() => {
-              //   handleChangeImporteTotal();
-              //   mostrarModalDetalles();
-              // }}
+              onClick={function () {
+                Swal.fire({
+                  icon: "warning",
+                  title: "Desea cambiar de mesa ?",
+                  text: "Seleccione la mesa",
+                  input: "select",
+                  // showCancelButton: true,
+                  inputOptions: {
+                    Mesas,
+                  },
+                  inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                      mesaSeleccionadaaaa(Mesas[value]);
+                      resolve();
+                    });
+                  },
+                });
+              }}
               sx={{
-                // mt: "10px",
-                // mb: "10px",
                 mb: "8px",
                 ml: "-110px",
                 left: "-12px",
@@ -456,6 +534,25 @@ export default function FormTicket() {
             </Button>
           </div>
           <Button
+            onClick={function () {
+              Swal.fire({
+                title: "Desea finalizar el ticket ?",
+                text: "Seleccion la opción deseada",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonColor: "#d33",
+                showDenyButton: true,
+                denyButtonText: "Guardar e imprimir",
+                denyButtonColor: "#2E3B55",
+                confirmButtonText: "Guardar",
+                confirmButtonColor: "#2E3B55",
+                cancelButtonText: "Cancelar",
+              }).then(function (result) {
+                if (result.value) {
+                  guardarTicket(idTicket);
+                }
+              });
+            }}
             type="submit"
             variant="contained"
             color="success"
@@ -473,6 +570,19 @@ export default function FormTicket() {
             finalizar
           </Button>
           <Button
+            onClick={function () {
+              Swal.fire({
+                icon: "error",
+                title: "Desea cancelar el ticket ?",
+                text: "Seleccione la opción deseada",
+                showCancelButton: true,
+                cancelButtonColor: "#d33",
+
+                confirmButtonText: "Sí",
+                confirmButtonColor: "#2E3B55",
+                cancelButtonText: "Cancelar",
+              });
+            }}
             type="submit"
             variant="contained"
             color="error"
@@ -504,7 +614,7 @@ export default function FormTicket() {
                 <div>
                   <Button
                     sx={{
-                      mt: "20px",
+                      mt: "1px",
                       mb: "1px",
                       mr: "-120px",
                       left: "3px",
@@ -519,14 +629,14 @@ export default function FormTicket() {
                   >
                     cerrar modal
                   </Button>
-                  <div>
+                  <div className="importeTotal">
                     <Label>Importe total: ${ticket.importeTotal}</Label>
                   </div>
                   <div>
                     <TextField
                       label="Descuento %"
                       sx={{ width: 200 }}
-                      className="alinearizq"
+                      // className="descuento"
                       type={"text"}
                       onChange={handleChangeDescuento}
                       value={descuento}
@@ -534,14 +644,15 @@ export default function FormTicket() {
                     <Button
                       sx={{
                         // mt: "20px",
-                        // mb: "1px",
+                        //mb: "-1px",
                         // mr: "-120px",
-                        left: "30px",
-                        width: "130px",
-                        borderRadius: "30px",
+                        left: "10px",
+                        height: "50px",
+                        width: "120px",
+                        borderRadius: "10px",
                       }}
                       component={Paper}
-                      className="alinearder"
+                      // className="aplicar"
                       type="submit"
                       // variant="contained"
                       value="Submit"
@@ -550,10 +661,10 @@ export default function FormTicket() {
                       aplicar
                     </Button>
                   </div>
-                  <div>
+                  <div className="importeFinal">
                     <Label>Importe final: ${ticket.importeFinal}</Label>
                   </div>
-                  <div>
+                  <div className="metodoPago">
                     <FormControl>
                       <InputLabel id="demo-simple-select-autowidth-label">
                         Metodo de pago
@@ -592,14 +703,15 @@ export default function FormTicket() {
                     >
                       cerrar modal
                     </Button>
-                    <Collapse in={mostrarAlerta} sx={{ mt: "20px" }}>
+
+                    <Collapse in={isAlertVisible} sx={{ mt: "20px" }}>
                       <Alert
                         sx={{ animationTimeline: "0s" }} //seguir con lo del timer que cierre solo el alaerta cuando haya tiempo
                         variant="filled"
                         severity="success"
-                        onClose={() => {
-                          setMostrarAlerta(false);
-                        }}
+                        // onClose={() => {
+                        //   setMostrarAlerta(false);
+                        // }}
                       >
                         Se agregó correctamente el producto.
                       </Alert>
@@ -774,12 +886,30 @@ export default function FormTicket() {
                                       </Button>
                                     </ButtonGroup>
                                     <Button
+                                      onClick={handleButtonClick}
                                       type="submit"
                                       sx={{ right: 40, marginTop: -1 }}
                                       handleClose
                                     >
+                                      {isAlertVisible && (
+                                        <div className="alert-container">
+                                          {/* <div className="alert-inner">
+                                            Alert! Alert!
+                                          </div> */}
+                                        </div>
+                                      )}
                                       agregar
                                     </Button>
+                                    {/* <button onClick={handleButtonClick}>
+                                      Show alert
+                                    </button> */}
+                                    {isAlertVisible && (
+                                      <div className="alert-container">
+                                        <div className="alert-inner">
+                                          Alert! Alert!
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                 </Box>
                               </TableHeaderCell>
@@ -808,7 +938,7 @@ export default function FormTicket() {
                 <TableCell className="celda">
                   <h5>cantidad</h5>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ width: "200px" }}>
                   <h5>precio unitario</h5>
                 </TableCell>
                 <TableCell>
@@ -843,11 +973,11 @@ export default function FormTicket() {
                   </TableCell>
                   <TableCell
                     sx={{ fontSize: "15px" }}
-                    align="left"
+                    align="center"
                     component="th"
                     scope="row"
                   >
-                    {ticket.precioProducto}
+                    ${ticket.precioProducto}
                   </TableCell>
                   <TableCell
                     sx={{ fontSize: "15px" }}
@@ -855,10 +985,10 @@ export default function FormTicket() {
                     component="th"
                     scope="row"
                   >
-                    {ticket.precioProducto * ticket.cantidad}
+                    ${ticket.precioProducto * ticket.cantidad}
                   </TableCell>
                   <TableHeaderCell>
-                    {buttonDelete(ticket.idProducto)}
+                    {buttonDelete(idTicket, ticket.idProducto, getDataTicket)}
                   </TableHeaderCell>
                 </TableRow>
               ))}
@@ -870,9 +1000,9 @@ export default function FormTicket() {
   );
 }
 
-function buttonDelete(producto) {
+function buttonDelete(idTicket, idProducto) {
   let button = (
-    <IconButton onClick={() => deleteProductoA(producto.id)}>
+    <IconButton onClick={() => deleteProductoA(idTicket, idProducto)}>
       <SvgComponentEliminar />
     </IconButton>
   );
@@ -880,7 +1010,7 @@ function buttonDelete(producto) {
   return button;
 }
 
-function deleteProductoA(id) {
+function deleteProductoA(idTicket, idProducto) {
   return Swal.fire({
     title: "Atencion!",
     text: "Está a punto de eliminar el producto de la base de datos",
@@ -892,7 +1022,7 @@ function deleteProductoA(id) {
     confirmButtonText: "Confirmar",
   }).then((result) => {
     if (result.isConfirmed) {
-      deleteProducto(id);
+      deleteTicketProducto(idTicket, idProducto);
     }
   });
 }
