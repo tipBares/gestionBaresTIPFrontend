@@ -9,11 +9,10 @@ import IconButton from "@mui/material/IconButton";
 import {
 	SvgComponentEliminar,
 	SvgComponentEditar,
-	SvgComponentAgregar,
 } from "../../icons/abm";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
-import { useForm } from "react-hook-form";
+
 //tabla basica
 import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
@@ -29,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import "./HistorialTickets.scss";
 
 export default function HistorialTickets() {
 	const navigate = useNavigate();
@@ -82,20 +82,21 @@ export default function HistorialTickets() {
 
 	return (
 		<Stack alignItems={"center"}>
+			<Stack>
+				<div className="buscador">
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DatePicker
+							label="Basic example"
+							value={fecha}
+							onChange={handleBuscarFecha}
+							renderInput={(params) => <TextField {...params} />}
+						/>
+					</LocalizationProvider>
+				</div>
+			</Stack>
 			<Box height={"auto"} width={"auto"}>
 				<Grid container>
 					<Grid item xs={6}>
-						<Grid item xs={6}></Grid>
-						<div>
-							<LocalizationProvider dateAdapter={AdapterDayjs}>
-								<DatePicker
-									label="Basic example"
-									value={fecha}
-									onChange={handleBuscarFecha}
-									renderInput={(params) => <TextField {...params} />}
-								/>
-							</LocalizationProvider>
-						</div>
 						<TableContainer
 							style={{ width: "1300px", marginTop: "45px" }}
 							component={Paper}
@@ -147,28 +148,27 @@ export default function HistorialTickets() {
 												{ticket.id}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{ticket.nroMesa}
+												{ticket?.mesa?.nroMesa}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
 												{ticket.fechaCreacion}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{ticket.mozo}
+												{ticket?.mozo?.nombre}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{ticket.metodoPago}
+												{ticket.metodoDePago}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{ticket.importe}
+												{ticket?.importeTotal}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
 												{ticket.descuento}
 											</TableCell>
 											<TableCell sx={{ fontSize: "15px" }} align="left">
-												{ticket.importeFinal}
+												{ticket?.importeFinal}
 											</TableCell>
 											<TableHeaderCell>
-												{buttonEdit(ticket, navigate)}
 												{buttonDelete(ticket)}
 											</TableHeaderCell>
 										</TableRow>
