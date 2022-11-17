@@ -80,3 +80,46 @@ table {
 .buscadoress {
   margin: 20px
 }
+
+.importeTotal {
+  margin: 10px;
+}
+
+.importeFinal {
+  margin: 10px;
+}
+
+.descuento {
+  margin: 10px;
+  float: left;
+}
+
+.aplicar {
+  // height:20px; 
+    //width:100px; 
+    margin: -20px -0px; 
+    //position:relative;
+    top:50%; 
+    left:6%;
+    //bottom:50%;
+}
+
+.metodoPago {
+  margin: 20px;
+  margin-left: 1px;
+}
+
+.alert-container {
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  right: 0;
+}
+
+.alert-inner {
+  display: inline-block;
+  padding: 8px 16px;
+  z-index: 1;
+  background-color: #ffffff;
+  
+}
