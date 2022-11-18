@@ -47,9 +47,9 @@ export default function ProductoLista() {
   const [productosInfo, setProductosInfo] = useState();
   const [nombre, setNombre] = useState("");
   const [categorias, setCategorias] = useState([]);
-  const [categoria, setCategoria] = useState("");
+  const [categoria, setCategoria] = useState(0);
 
-  const { register, handleSubmit } = useForm();
+  const { register } = useForm();
 
   useEffect(() => {
     getData();
@@ -73,19 +73,20 @@ export default function ProductoLista() {
   const handleChange = async (event, value) => {
     if (nombre && nombre.length > 0) {
       const productosDisponibles = await getProductoByName(nombre, value - 1);
-      setProductosInfo(productosDisponibles);
       setProductos(productosDisponibles.content);
+      setProductosInfo(productosDisponibles);
     } else if (categoria !== 0) {
       const productosDisponibles = await getProductoByCategoria(
         categoria,
         value - 1
       );
-      setProductosInfo(productosDisponibles);
       setProductos(productosDisponibles.content);
+      setProductosInfo(productosDisponibles);
     } else {
       const productosDisponibles = await getProductos(value - 1);
-      setProductosInfo(productosDisponibles);
       setProductos(productosDisponibles.content);
+      setProductosInfo(productosDisponibles);
+      
     }
   };
 
@@ -238,7 +239,7 @@ export default function ProductoLista() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {productos.map((producto) => (
+              {productos?.map((producto) => (
                 <TableRow
                   key={producto.nombre}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

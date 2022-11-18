@@ -2,7 +2,6 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-import {
   Alert,
   Badge,
   Box,
@@ -22,6 +21,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+
 } from "@mui/material";
 import { styled } from "@mui/system";
 import BadgeUnstyled, { badgeUnstyledClasses } from "@mui/base/BadgeUnstyled";
@@ -32,15 +32,16 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import InputLabel from "@mui/material/InputLabel";
 import {
-  SvgComponentAgregar,
-  SvgComponentAjustes,
-  SvgComponentEliminar,
+	SvgComponentAgregar,
+	SvgComponentAjustes,
+	SvgComponentEliminar,
 } from "../../icons/abm";
 import React from "react";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import "./FormTicket.scss";
 import {
+
   // createTicket,
   // editTicket,
   getTicketById,
@@ -55,18 +56,18 @@ import {
   guardarTicket,
 } from "../../services/ticket-service";
 import {
-  getCategorias,
-  getCategoriasAll,
+	getCategorias,
+	getCategoriasAll,
 } from "../../services/categoria-service";
 import {
-  getProductoByName,
-  getProductoByNameAll,
-  getProductos,
-  getProductoByCategoria,
-  getProductoByCategoriaAll,
-  getProductoById,
-  getProductosAll,
-  deleteProducto,
+	getProductoByName,
+	getProductoByNameAll,
+	getProductos,
+	getProductoByCategoria,
+	getProductoByCategoriaAll,
+	getProductoById,
+	getProductosAll,
+	deleteProducto,
 } from "../../services/producto_service";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -75,14 +76,16 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { getMesaById, getMesas } from "../../services/mesa-service";
 import { getMozos, getMozosAll } from "../../services/mozo-service";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import CrearPDF from "../CreatePDF/CreatePDF";
 
 const blue = {
-  500: "#007FFF",
+	500: "#007FFF",
 };
 
 const grey = {
-  300: "#afb8c1",
-  900: "#24292f",
+	300: "#afb8c1",
+	900: "#24292f",
 };
 
 // let notification = new Notification(StepTitle, createFilterOptions);
@@ -91,7 +94,7 @@ const grey = {
 // }, 4000);
 
 const StyledBadge = styled(BadgeUnstyled)(
-  ({ theme }) => `
+	({ theme }) => `
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -119,8 +122,8 @@ const StyledBadge = styled(BadgeUnstyled)(
     border-radius: 12px;
     background: ${blue[500]};
     box-shadow: 0px 4px 6x ${
-      theme.palette.mode === "dark" ? grey[900] : grey[300]
-    };
+			theme.palette.mode === "dark" ? grey[900] : grey[300]
+		};
     transform: translate(50%, -50%);
     transform-origin: 100% 0; 
   }
@@ -133,20 +136,21 @@ const StyledBadge = styled(BadgeUnstyled)(
 );
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "autowidth",
-  height: "autowidth",
-  overflowY: "scroll",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: "autowidth",
+	height: "autowidth",
+	overflowY: "scroll",
+	bgcolor: "background.paper",
+	border: "2px solid #000",
+	boxShadow: 24,
+	p: 4,
 };
 
 export default function FormTicket() {
+
   //const { mesa } = props;
   //cuenta la cantidad del producto a agregar
   //const [count, setCount] = useState(1);
@@ -194,6 +198,8 @@ export default function FormTicket() {
   console.log("const mozo 2", mozo);
   const [ticket, setTicket] = useState({});
   const [descuento, setDescuento] = useState();
+   // borrar const verPDF
+	const [verPDF, setVerPDF] = useState(false);
   // const [metodoDePago, setMetodoDePago] = useState ({Efectivo});
 
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -455,7 +461,35 @@ export default function FormTicket() {
               </Select>
             </FormControl>
           </div>
+          </div>
+					<PDFDownloadLink
+						document={<CrearPDF ticket={ticket} />}
+						fileName="Ticket.pdf"
+					>
+						<Button variant="info">Descargar PDF</Button>
+					</PDFDownloadLink>
 
+					{/* borrar desde aca */}
+					<div>
+						<Button
+							variant="dark"
+							onClick={() => {
+								setVerPDF(!verPDF);
+							}}
+						>
+							{verPDF ? "Ocultar PDF" : "Ver PDF"}
+						</Button>
+						{ticket ? (
+							<>
+								{verPDF ? (
+									<PDFViewer style={{ width: "100%", height: "90vh" }}>
+										<CrearPDF ticket={ticket} />
+									</PDFViewer>
+								) : null}
+							</>
+						) : null}
+					</div>
+					{/* borrar hasta aca */}
           {/* la tabla va a mostrar cantidad nombre precio unitario e importe */}
           <Button
             onClick={mostrarModalProductos}
@@ -925,6 +959,7 @@ export default function FormTicket() {
                   count={productosInfo?.totalPages}
                   size="small"
                 /> */}
+
                 </div>
               )}
             </Box>
@@ -1007,7 +1042,7 @@ function buttonDelete(idTicket, idProducto) {
     </IconButton>
   );
 
-  return button;
+	return button;
 }
 
 function deleteProductoA(idTicket, idProducto) {

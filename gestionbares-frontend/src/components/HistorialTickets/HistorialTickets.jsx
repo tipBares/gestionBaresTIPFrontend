@@ -7,13 +7,15 @@ import {
 } from "../../services/ticket-service";
 import IconButton from "@mui/material/IconButton";
 import {
+
   SvgComponentEliminar,
   SvgComponentEditar,
   SvgComponentAgregar,
+
 } from "../../icons/abm";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
-import { useForm } from "react-hook-form";
+
 //tabla basica
 import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
@@ -29,6 +31,7 @@ import { useNavigate } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import "./HistorialTickets.scss";
 
 export default function HistorialTickets() {
   const navigate = useNavigate();
@@ -80,113 +83,114 @@ export default function HistorialTickets() {
     }
   };
 
-  return (
-    <Stack alignItems={"center"}>
-      <Box height={"auto"} width={"auto"}>
-        <Grid container>
-          <Grid item xs={6}>
-            <Grid item xs={6}></Grid>
-            <div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Basic example"
-                  value={fecha}
-                  onChange={handleBuscarFecha}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </div>
-            <TableContainer
-              style={{ width: "1300px", marginTop: "45px" }}
-              component={Paper}
-            >
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="celda">
-                      <h5>ID</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>Nro MESA</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>FECHA</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>MOZO</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>METODO DE PAGO</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>IMPORTE</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>DESCUENTO</h5>
-                    </TableCell>
-                    <TableCell className="celda">
-                      <h5>IMPORTE FINAL</h5>
-                    </TableCell>
-                    <TableCell className="acciones">
-                      <h5>ACCIONES</h5>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {tickets?.map((ticket) => (
-                    <TableRow
-                      key={ticket.id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell
-                        sx={{ fontSize: "15px" }}
-                        align="left"
-                        component="th"
-                        scope="row"
-                      >
-                        {ticket.id}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket?.mesa?.nroMesa}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket.fechaCreacion}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket?.mozo?.nombre}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket.metodoDePago}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket.importeTotal}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket.descuento}
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "15px" }} align="left">
-                        {ticket.importeFinal}
-                      </TableCell>
-                      <TableHeaderCell>
-                        {buttonEdit(ticket, navigate)}
-                        {buttonDelete(ticket)}
-                      </TableHeaderCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-        </Grid>
-        <Pagination
-          onChange={handleChange}
-          shape="rounded"
-          count={ticketsInfo?.totalPages}
-          size="small"
-        />
-      </Box>
-    </Stack>
-  );
+
+	return (
+		<Stack alignItems={"center"}>
+			<Stack>
+				<div className="buscador">
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<DatePicker
+							label="Basic example"
+							value={fecha}
+							onChange={handleBuscarFecha}
+							renderInput={(params) => <TextField {...params} />}
+						/>
+					</LocalizationProvider>
+				</div>
+			</Stack>
+			<Box height={"auto"} width={"auto"}>
+				<Grid container>
+					<Grid item xs={6}>
+						<TableContainer
+							style={{ width: "1300px", marginTop: "45px" }}
+							component={Paper}
+						>
+							<Table aria-label="simple table">
+								<TableHead>
+									<TableRow>
+										<TableCell className="celda">
+											<h5>ID</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>Nro MESA</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>FECHA</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>MOZO</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>METODO DE PAGO</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>IMPORTE</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>DESCUENTO</h5>
+										</TableCell>
+										<TableCell className="celda">
+											<h5>IMPORTE FINAL</h5>
+										</TableCell>
+										<TableCell className="acciones">
+											<h5>ACCIONES</h5>
+										</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{tickets?.map((ticket) => (
+										<TableRow
+											key={ticket.id}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell
+												sx={{ fontSize: "15px" }}
+												align="left"
+												component="th"
+												scope="row"
+											>
+												{ticket.id}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket?.mesa?.nroMesa}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket.fechaCreacion}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket?.mozo?.nombre}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket.metodoDePago}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket?.importeTotal}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket.descuento}
+											</TableCell>
+											<TableCell sx={{ fontSize: "15px" }} align="left">
+												{ticket?.importeFinal}
+											</TableCell>
+											<TableHeaderCell>
+												{buttonDelete(ticket)}
+											</TableHeaderCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Grid>
+				</Grid>
+				<Pagination
+					onChange={handleChange}
+					shape="rounded"
+					count={ticketsInfo?.totalPages}
+					size="small"
+				/>
+			</Box>
+		</Stack>
+	);
 }
 
 function buttonDelete(ticket) {
