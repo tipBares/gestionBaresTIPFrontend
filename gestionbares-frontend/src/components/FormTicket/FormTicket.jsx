@@ -1,7 +1,7 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-
+import {
   Alert,
   Badge,
   Box,
@@ -20,7 +20,7 @@ import Swal from "sweetalert2";
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
+  TextField
 
 } from "@mui/material";
 import { styled } from "@mui/system";
@@ -461,7 +461,7 @@ export default function FormTicket() {
               </Select>
             </FormControl>
           </div>
-          </div>
+          
 					<PDFDownloadLink
 						document={<CrearPDF ticket={ticket} />}
 						fileName="Ticket.pdf"
