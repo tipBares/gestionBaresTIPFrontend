@@ -1,14 +1,17 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import {
-	deleteTicket,
-	getTicket,
-	getTicketByDate,
+  deleteTicket,
+  getTicket,
+  getTicketByDate,
 } from "../../services/ticket-service";
 import IconButton from "@mui/material/IconButton";
 import {
-	SvgComponentEliminar,
-	SvgComponentEditar,
+
+  SvgComponentEliminar,
+  SvgComponentEditar,
+  SvgComponentAgregar,
+
 } from "../../icons/abm";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
@@ -31,54 +34,55 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "./HistorialTickets.scss";
 
 export default function HistorialTickets() {
-	const navigate = useNavigate();
-	const [tickets, setTickets] = useState([]);
-	const [ticketsInfo, setTicketsInfo] = useState();
-	const [fecha, setFecha] = useState();
+  const navigate = useNavigate();
+  const [tickets, setTickets] = useState([]);
+  const [ticketsInfo, setTicketsInfo] = useState();
+  const [fecha, setFecha] = useState();
 
-	useEffect(() => {
-		getData();
-	}, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-	const getData = async () => {
-		const ticketsDisponibles = await getTicket(0);
-		setTicketsInfo(ticketsDisponibles);
-		setTickets(ticketsDisponibles.content);
-		console.log(ticketsDisponibles);
-	};
+  const getData = async () => {
+    const ticketsDisponibles = await getTicket(0);
+    setTicketsInfo(ticketsDisponibles);
+    setTickets(ticketsDisponibles.content);
+    console.log(ticketsDisponibles);
+  };
 
-	const handleChange = async (event, value) => {
-		console.log("value: ", value);
-		const ticketsDisponibles = await getTicket(value - 1);
-		setTicketsInfo(ticketsDisponibles);
-		setTickets(ticketsDisponibles.content);
-	};
+  const handleChange = async (event, value) => {
+    console.log("value: ", value);
+    const ticketsDisponibles = await getTicket(value - 1);
+    setTicketsInfo(ticketsDisponibles);
+    setTickets(ticketsDisponibles.content);
+  };
 
-	const handleBuscarFecha = async (event) => {
-		function formatDate(date) {
-			var d = new Date(date),
-				month = "" + (d.getMonth() + 1),
-				day = "" + d.getDate(),
-				year = d.getFullYear();
+  const handleBuscarFecha = async (event) => {
+    function formatDate(date) {
+      var d = new Date(date),
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
 
-			if (month.length < 2) month = "0" + month;
-			if (day.length < 2) day = "0" + day;
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
 
-			return [year, month, day].join("-");
-		}
-		const fechaFormateada = formatDate(event);
-		if (event) {
-			setFecha(event);
-			const ticketsDisponibles = await getTicketByDate(fechaFormateada, 0);
-			setTicketsInfo(ticketsDisponibles);
-			setTickets(ticketsDisponibles.content);
-		} else {
-			setFecha(null);
-			const ticketsDisponibles = await getTicket(0);
-			setTicketsInfo(ticketsDisponibles);
-			setTickets(ticketsDisponibles.content);
-		}
-	};
+      return [year, month, day].join("-");
+    }
+    const fechaFormateada = formatDate(event);
+    if (event) {
+      setFecha(event);
+      const ticketsDisponibles = await getTicketByDate(fechaFormateada, 0);
+      setTicketsInfo(ticketsDisponibles);
+      setTickets(ticketsDisponibles.content);
+    } else {
+      setFecha(null);
+      const ticketsDisponibles = await getTicket(0);
+      setTicketsInfo(ticketsDisponibles);
+      setTickets(ticketsDisponibles.content);
+    }
+  };
+
 
 	return (
 		<Stack alignItems={"center"}>
@@ -190,55 +194,55 @@ export default function HistorialTickets() {
 }
 
 function buttonDelete(ticket) {
-	let button = (
-		<IconButton onClick={() => deleteTicketA(ticket.id)}>
-			<SvgComponentEliminar />
-		</IconButton>
-	);
+  let button = (
+    <IconButton onClick={() => deleteTicketA(ticket.id)}>
+      <SvgComponentEliminar />
+    </IconButton>
+  );
 
-	return button;
+  return button;
 }
 
 function deleteTicketA(id) {
-	return Swal.fire({
-		title: "Atencion!",
-		text: "Está a punto de eliminar el ticket de la base de datos",
-		icon: "warning",
-		showCancelButton: true,
-		cancelButtonColor: "blue",
-		cancelButtonText: "Cancelar",
-		confirmButtonColor: "red",
-		confirmButtonText: "Confirmar",
-	}).then((result) => {
-		if (result.isConfirmed) {
-			deleteTicket(id);
-		}
-	});
+  return Swal.fire({
+    title: "Atencion!",
+    text: "Está a punto de eliminar el ticket de la base de datos",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "blue",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "red",
+    confirmButtonText: "Confirmar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteTicket(id);
+    }
+  });
 }
 
 function buttonEdit(ticket, navigate) {
-	let buttoon = (
-		<IconButton onClick={() => editarTicket(ticket.id, navigate)}>
-			<SvgComponentEditar />
-		</IconButton>
-	);
-	return buttoon;
+  let buttoon = (
+    <IconButton onClick={() => editarTicket(ticket.id, navigate)}>
+      <SvgComponentEditar />
+    </IconButton>
+  );
+  return buttoon;
 }
 
 function editarTicket(id, navigate) {
-	return Swal.fire({
-		title: "Atencion!",
-		text: "Está a punto de editar el ticket de la base de datos",
-		icon: "warning",
-		showCancelButton: true,
-		cancelButtonColor: "blue",
-		cancelButtonText: "Cancelar",
-		confirmButtonColor: "red",
-		confirmButtonText: "Confirmar",
-	}).then((result) => {
-		if (result.isConfirmed) {
-			let url = `/editarTicket/${id}`;
-			return navigate(url);
-		}
-	});
+  return Swal.fire({
+    title: "Atencion!",
+    text: "Está a punto de editar el ticket de la base de datos",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "blue",
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: "red",
+    confirmButtonText: "Confirmar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let url = `/editarTicket/${id}`;
+      return navigate(url);
+    }
+  });
 }

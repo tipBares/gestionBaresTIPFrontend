@@ -162,6 +162,27 @@ export async function updateMetodoDePago(id, metodoDePago) {
   }
 }
 
+export async function updateMesa(idTicket, idMesa) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/tickets/${idTicket}/mesas/${idMesa}`,
+      method: "PUT",
+    });
+    Swal.fire({
+      title: "Hecho!",
+      text: "La mesa se cambió correctamente, presioné Cerrar para actualizar",
+      icon: "success",
+      timer: 1000,
+      confirmButtonText: "Cerrar",
+    }).then((result) => {
+      // /window.location = window.location.href;
+    });
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export async function applyDiscount(id, porcentaje) {
   try {
     const response = await axios({
@@ -182,6 +203,48 @@ export async function generarImporteTotal(id) {
       method: "PUT",
     });
 
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function deleteTicketProducto(idTicket, idProducto) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/tickets/${idTicket}/productos/${idProducto}`,
+      method: "DELETE",
+    });
+    Swal.fire({
+      title: "Hecho!",
+      text: "El producto se ha borrado correctamente, presioné Cerrar para actualizar",
+      icon: "success",
+      timer: 1000,
+      confirmButtonText: "Cerrar",
+    }).then((result) => {
+      window.location = window.location.href;
+    });
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function guardarTicket(idTicket) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/tickets/historico/${idTicket}`,
+      method: "PUT",
+    });
+    Swal.fire({
+      title: "Hecho!",
+      text: "El ticket se guardó correctamente, presioné Cerrar para actualizar",
+      icon: "success",
+      timer: 1000,
+      confirmButtonText: "Cerrar",
+    }).then((result) => {
+      window.location = "/";
+    });
     return response;
   } catch (err) {
     console.error(err);
