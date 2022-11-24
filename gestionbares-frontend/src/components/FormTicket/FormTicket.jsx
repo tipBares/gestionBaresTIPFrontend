@@ -10,6 +10,7 @@ import {
   Collapse,
   createFilterOptions,
   FormControl,
+  Grid,
   IconButton,
   MenuItem,
   Pagination,
@@ -20,8 +21,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField
-
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import BadgeUnstyled, { badgeUnstyledClasses } from "@mui/base/BadgeUnstyled";
@@ -32,16 +32,15 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import InputLabel from "@mui/material/InputLabel";
 import {
-	SvgComponentAgregar,
-	SvgComponentAjustes,
-	SvgComponentEliminar,
+  SvgComponentAgregar,
+  SvgComponentAjustes,
+  SvgComponentEliminar,
 } from "../../icons/abm";
 import React from "react";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import "./FormTicket.scss";
 import {
-
   // createTicket,
   // editTicket,
   getTicketById,
@@ -54,20 +53,21 @@ import {
   alertaAnimada,
   updateMesa,
   guardarTicket,
+  cancelarTicket,
 } from "../../services/ticket-service";
 import {
-	getCategorias,
-	getCategoriasAll,
+  getCategorias,
+  getCategoriasAll,
 } from "../../services/categoria-service";
 import {
-	getProductoByName,
-	getProductoByNameAll,
-	getProductos,
-	getProductoByCategoria,
-	getProductoByCategoriaAll,
-	getProductoById,
-	getProductosAll,
-	deleteProducto,
+  getProductoByName,
+  getProductoByNameAll,
+  getProductos,
+  getProductoByCategoria,
+  getProductoByCategoriaAll,
+  getProductoById,
+  getProductosAll,
+  deleteProducto,
 } from "../../services/producto_service";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -76,16 +76,16 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { getMesaById, getMesas } from "../../services/mesa-service";
 import { getMozos, getMozosAll } from "../../services/mozo-service";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import CrearPDF from "../CreatePDF/CreatePDF";
 
 const blue = {
-	500: "#007FFF",
+  500: "#007FFF",
 };
 
 const grey = {
-	300: "#afb8c1",
-	900: "#24292f",
+  300: "#afb8c1",
+  900: "#24292f",
 };
 
 // let notification = new Notification(StepTitle, createFilterOptions);
@@ -94,7 +94,7 @@ const grey = {
 // }, 4000);
 
 const StyledBadge = styled(BadgeUnstyled)(
-	({ theme }) => `
+  ({ theme }) => `
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -122,8 +122,8 @@ const StyledBadge = styled(BadgeUnstyled)(
     border-radius: 12px;
     background: ${blue[500]};
     box-shadow: 0px 4px 6x ${
-			theme.palette.mode === "dark" ? grey[900] : grey[300]
-		};
+      theme.palette.mode === "dark" ? grey[900] : grey[300]
+    };
     transform: translate(50%, -50%);
     transform-origin: 100% 0; 
   }
@@ -136,21 +136,20 @@ const StyledBadge = styled(BadgeUnstyled)(
 );
 
 const style = {
-	position: "absolute",
-	top: "50%",
-	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "autowidth",
-	height: "autowidth",
-	overflowY: "scroll",
-	bgcolor: "background.paper",
-	border: "2px solid #000",
-	boxShadow: 24,
-	p: 4,
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "autowidth",
+  height: "autowidth",
+  overflowY: "scroll",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
 export default function FormTicket() {
-
   //const { mesa } = props;
   //cuenta la cantidad del producto a agregar
   //const [count, setCount] = useState(1);
@@ -160,6 +159,7 @@ export default function FormTicket() {
   const handleClose = () => setOpen(false);
   //modal para descuent/metodo de pago
   const [modalProductos, setModalProductos] = useState(true);
+  const [modalPdf, setModalPdf] = useState(false);
   //pruebo estados para un alerta de confirmacion
   const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
@@ -169,10 +169,17 @@ export default function FormTicket() {
   };
   const mostrarModalProductos = () => {
     setModalProductos(true);
+    setModalPdf(false);
+
     handleOpen();
   };
   const mostrarModalDetalles = () => {
     setModalProductos(false);
+    setModalPdf(false);
+    handleOpen();
+  };
+  const mostrarModalPdf = () => {
+    setModalPdf(true);
     handleOpen();
   };
 
@@ -198,8 +205,8 @@ export default function FormTicket() {
   console.log("const mozo 2", mozo);
   const [ticket, setTicket] = useState({});
   const [descuento, setDescuento] = useState();
-   // borrar const verPDF
-	const [verPDF, setVerPDF] = useState(false);
+  // borrar const verPDF
+  const [verPDF, setVerPDF] = useState(false);
   // const [metodoDePago, setMetodoDePago] = useState ({Efectivo});
 
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -265,9 +272,6 @@ export default function FormTicket() {
   };
   const getDataTicket = async () => {
     const response = await getTicketById(idTicket);
-    // reset({
-    //   mozo: response.data.mozo,
-    // });
     setTicket(response);
     console.log(
       "tabla intermedia productos seteada: ",
@@ -278,7 +282,7 @@ export default function FormTicket() {
 
     console.log("const ticket ", ticket);
     console.log("response data ticket: ", response);
-    setMozo(response.mozo);
+    setMozo(response.mozo.id);
 
     console.log("id auxiliar" + idTicket);
     console.log("id ticket" + response.id);
@@ -326,11 +330,11 @@ export default function FormTicket() {
   };
 
   const handleChangeMozo = async (event, value) => {
-    setMozo({ id: event.target.value });
+    setMozo(event.target.value);
     console.log("paso handle change mozo 221: ", event.target.value);
     await updateMozoInTicket(idTicket, event.target.value);
     console.log("mozoId nuevo: ", event.target.value);
-    getDataTicket();
+    // getDataTicket();
   };
 
   // const optionsMozosPrueba() => {
@@ -447,7 +451,7 @@ export default function FormTicket() {
                 //name="capturarMozo"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={mozo?.nombre ? `${mozo?.id}` : ""}
+                value={mozo}
                 {...register("mozo")}
                 onChange={handleChangeMozo}
 
@@ -461,35 +465,8 @@ export default function FormTicket() {
               </Select>
             </FormControl>
           </div>
-          
-					<PDFDownloadLink
-						document={<CrearPDF ticket={ticket} />}
-						fileName="Ticket.pdf"
-					>
-						<Button variant="info">Descargar PDF</Button>
-					</PDFDownloadLink>
 
-					{/* borrar desde aca */}
-					<div>
-						<Button
-							variant="dark"
-							onClick={() => {
-								setVerPDF(!verPDF);
-							}}
-						>
-							{verPDF ? "Ocultar PDF" : "Ver PDF"}
-						</Button>
-						{ticket ? (
-							<>
-								{verPDF ? (
-									<PDFViewer style={{ width: "100%", height: "90vh" }}>
-										<CrearPDF ticket={ticket} />
-									</PDFViewer>
-								) : null}
-							</>
-						) : null}
-					</div>
-					{/* borrar hasta aca */}
+          {/* borrar hasta aca */}
           {/* la tabla va a mostrar cantidad nombre precio unitario e importe */}
           <Button
             onClick={mostrarModalProductos}
@@ -568,24 +545,8 @@ export default function FormTicket() {
             </Button>
           </div>
           <Button
-            onClick={function () {
-              Swal.fire({
-                title: "Desea finalizar el ticket ?",
-                text: "Seleccion la opción deseada",
-                icon: "warning",
-                showCancelButton: true,
-                cancelButtonColor: "#d33",
-                showDenyButton: true,
-                denyButtonText: "Guardar e imprimir",
-                denyButtonColor: "#2E3B55",
-                confirmButtonText: "Guardar",
-                confirmButtonColor: "#2E3B55",
-                cancelButtonText: "Cancelar",
-              }).then(function (result) {
-                if (result.value) {
-                  guardarTicket(idTicket);
-                }
-              });
+            onClick={() => {
+              mostrarModalPdf();
             }}
             type="submit"
             variant="contained"
@@ -615,6 +576,12 @@ export default function FormTicket() {
                 confirmButtonText: "Sí",
                 confirmButtonColor: "#2E3B55",
                 cancelButtonText: "Cancelar",
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  //aca va la peticion de cancelar mesa y pone en true la columna cancelado del backend
+                  cancelarTicket(idTicket, id);
+                }
               });
             }}
             type="submit"
@@ -644,7 +611,83 @@ export default function FormTicket() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              {!modalProductos && (
+              {modalPdf && (
+                <Grid
+                  container
+                  spacing={{ xs: 2, md: 3 }}
+                  columns={{ xs: 4, sm: 8, md: 12 }}
+                >
+                  <Grid item p={2} xs={2} sm={4} md={4}>
+                    <Button
+                      sx={{
+                        // mt: "1px",
+                        // mb: "50px",
+
+                        alignContent: "center",
+
+                        left: "190px",
+                        width: "190px",
+                        borderRadius: "30px",
+                      }}
+                      component={Paper}
+                      onClick={() => guardarTicket(idTicket) && handleClose()}
+                    >
+                      Guardar
+                    </Button>
+
+                    <PDFDownloadLink
+                      document={<CrearPDF ticket={ticket} />}
+                      fileName="Ticket.pdf"
+                    >
+                      <Button
+                        sx={{
+                          //alignItems: "center",
+                          //mb: "10px",
+                          mt: "20px",
+                          alignContent: "center",
+                          left: "190px",
+                          borderRadius: "30px",
+                          width: "190px",
+                          //left: "95px",
+                        }}
+                        component={Paper}
+                        onClick={async () => {
+                          await guardarTicket(idTicket);
+                          handleClose();
+                        }}
+                        //onClick={async () => {await this.asyncFunc("Example");} }
+                        variant="info"
+                      >
+                        Guardar e imprimir
+                      </Button>
+                    </PDFDownloadLink>
+
+                    <Button
+                      color="error"
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        mt: "15px",
+                        //mb: "10px",
+                        // ml: "20px",
+                        // margin: "5px",
+                        // right: "-70px",
+                        left: "190px",
+                        alignContent: "center",
+                        width: "190px",
+                        borderRadius: "30px",
+                      }}
+                      component={Paper}
+                      onClick={() => {
+                        handleClose();
+                      }}
+                    >
+                      cerrar
+                    </Button>
+                  </Grid>
+                </Grid>
+              )}
+              {!modalPdf && !modalProductos && (
                 <div>
                   <Button
                     sx={{
@@ -718,7 +761,7 @@ export default function FormTicket() {
                   </div>
                 </div>
               )}
-              {modalProductos && (
+              {!modalPdf && modalProductos && (
                 <div>
                   <div>
                     <Button
@@ -847,7 +890,7 @@ export default function FormTicket() {
                                     flexDirection: "column",
                                     // right: "10px",
                                     "& > *": {
-                                      marginBottom: 0,
+                                      marginBottom: -2,
                                     },
                                     [`& .${badgeUnstyledClasses.root}`]: {
                                       marginRight: 2,
@@ -858,7 +901,10 @@ export default function FormTicket() {
                                 >
                                   <div>
                                     <StyledBadge
-                                      sx={{ marginTop: 1, left: -60 }}
+                                      sx={{
+                                        marginTop: 1,
+                                        left: -60,
+                                      }}
                                       badgeContent={
                                         idProducto === producto.id
                                           ? cantidad
@@ -880,7 +926,7 @@ export default function FormTicket() {
                                       })}
                                     >
                                       <Button
-                                        sx={{ right: 50 }}
+                                        sx={{ right: 65 }}
                                         aria-label="reduce"
                                         onClick={() => {
                                           console.log(
@@ -900,7 +946,7 @@ export default function FormTicket() {
                                         <RemoveIcon fontSize="small" />
                                       </Button>
                                       <Button
-                                        sx={{ right: 50 }}
+                                        sx={{ right: 65 }}
                                         aria-label="increase"
                                         onClick={() => {
                                           console.log(
@@ -922,7 +968,7 @@ export default function FormTicket() {
                                     <Button
                                       onClick={handleButtonClick}
                                       type="submit"
-                                      sx={{ right: 40, marginTop: -1 }}
+                                      sx={{ right: -40, marginTop: -6 }}
                                       handleClose
                                     >
                                       {isAlertVisible && (
@@ -959,7 +1005,6 @@ export default function FormTicket() {
                   count={productosInfo?.totalPages}
                   size="small"
                 /> */}
-
                 </div>
               )}
             </Box>
@@ -1042,7 +1087,7 @@ function buttonDelete(idTicket, idProducto) {
     </IconButton>
   );
 
-	return button;
+  return button;
 }
 
 function deleteProductoA(idTicket, idProducto) {

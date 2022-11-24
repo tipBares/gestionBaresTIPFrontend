@@ -250,3 +250,24 @@ export async function guardarTicket(idTicket) {
     console.error(err);
   }
 }
+
+export async function cancelarTicket(idTicket, idMesa) {
+  try {
+    const response = await axios({
+      url: `${baseUrl}/tickets/cancelar/${idTicket}/mesas/${idMesa}`,
+      method: "PUT",
+    });
+    Swal.fire({
+      title: "Hecho!",
+      text: "El ticket se canceló correctamente, presioné Cerrar para actualizar",
+      icon: "success",
+      timer: 2000,
+      confirmButtonText: "Cerrar",
+    }).then((result) => {
+      window.location = "/";
+    });
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
+}
