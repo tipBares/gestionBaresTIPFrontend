@@ -436,6 +436,12 @@ export default function FormTicket() {
     console.log(Mesas);
   });
 
+  const imprimirTicket = async () => {
+	<PDFDownloadLink document={<CrearPDF ticket={ticket} />} fileName="ticket.pdf">
+		{({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+	</PDFDownloadLink>
+	  };
+
   return (
     <Stack style={{ marginTop: "100px" }} alignItems={"center"}>
       <div className="milky">{id ? "Editar Ticket" : "Nuevo Ticket"}</div>
@@ -544,9 +550,34 @@ export default function FormTicket() {
               </div>
             </Button>
           </div>
+		  
           <Button
+<<<<<<< Updated upstream
             onClick={() => {
               mostrarModalPdf();
+=======
+            onClick={function () {
+              Swal.fire({
+                title: "Desea finalizar el ticket ?",
+                text: "Seleccion la opción deseada",
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonColor: "#d33",
+                showDenyButton: true,
+                denyButtonText: "Guardar e imprimir",
+                denyButtonColor: "#2E3B55",
+                confirmButtonText: "Guardar",
+                confirmButtonColor: "#2E3B55",
+                cancelButtonText: "Cancelar",
+              }).then(function (result) {
+                if (result.value) {
+                  guardarTicket(idTicket);
+                } else if (result.isDenied) {			
+				  //guardarTicket(idTicket);
+				  {imprimirTicket()}
+				}					
+              });
+>>>>>>> Stashed changes
             }}
             type="submit"
             variant="contained"
@@ -564,6 +595,7 @@ export default function FormTicket() {
             {/* {id ? "editar" : "crear"} */}
             finalizar
           </Button>
+		
           <Button
             onClick={function () {
               Swal.fire({
