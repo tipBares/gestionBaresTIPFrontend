@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { getMesas } from "../../services/mesa-service";
-import { Button, IconButton } from "@mui/material";
-import { Popup, Grid } from "semantic-ui-react";
-import { SvgComponentMesa } from "../../icons/abm";
+import { Button, IconButton, Stack } from "@mui/material";
+import { Popup, Grid, Label } from "semantic-ui-react";
+import { SvgComponentMesa, SvgComponentMesaEnProceso } from "../../icons/abm";
 //import "./Mesa.scss";
 import { createTicket } from "../../services/ticket-service";
 import { nombreBar, direccionBar } from "../../services/datos-service";
@@ -32,41 +32,61 @@ export default function ListMesas() {
   }, []);
 
   const PopupExamplePinned = () => (
-    <Grid.Column sx={gridStyles}>
-      {mesas.map((mesa) => (
-        <Popup
-          content={mesas && mesa && mesa.nroMesa}
-          on="click"
-          position="top left"
-          trigger={
-            <IconButton>
-              <SvgComponentMesa />
-            </IconButton>
-          }
-        >
-          <p>numero de mesa: {mesa.nroMesa}</p>
+    <div>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {mesas.map((mesa, index) => (
+          <Grid item p={2} xs={2} sm={4} md={4} key={index}>
+            <Popup
+              content={mesas && mesa && mesa.nroMesa}
+              on="click"
+              //position="top left"
+              trigger={
+                mesa.abierta ? (
+                  <Stack pt={2} spacing={2}>
+                    <IconButton>
+                      <SvgComponentMesa />
+                    </IconButton>
+                    {mesa.nroMesa}
+                  </Stack>
+                ) : (
+                  <Stack pt={2} spacing={2}>
+                    <IconButton>
+                      <SvgComponentMesaEnProceso />
+                    </IconButton>
+                    {mesa.nroMesa}
+                  </Stack>
+                )
+              }
+            >
+              <p>numero de mesa: {mesa.nroMesa}</p>
 
-          <Button
-            style={{ display: !mesa.abierta ? "block" : "none" }}
-            onClick={() => {
-              create(mesa.id);
-              navigate(`/abrirTicket/${mesa.id}`);
-            }}
-          >
-            generar ticket
-          </Button>
+              <Button
+                style={{ display: !mesa.abierta ? "block" : "none" }}
+                onClick={() => {
+                  create(mesa.id);
+                  navigate(`/abrirTicket/${mesa.id}`);
+                }}
+              >
+                generar ticket
+              </Button>
 
-          <Button
-            style={{ display: mesa.abierta ? "block" : "none" }}
-            onClick={() => {
-              navigate(`/abrirTicket/${mesa.id}`);
-            }}
-          >
-            ver ticket
-          </Button>
-        </Popup>
-      ))}
-    </Grid.Column>
+              <Button
+                style={{ display: mesa.abierta ? "block" : "none" }}
+                onClick={() => {
+                  navigate(`/abrirTicket/${mesa.id}`);
+                }}
+              >
+                ver ticket
+              </Button>
+            </Popup>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 
   return <PopupExamplePinned />;
