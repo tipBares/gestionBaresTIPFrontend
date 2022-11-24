@@ -163,9 +163,6 @@ export default function HistorialTickets() {
                     <TableCell className="celda">
                       <h5>IMPORTE FINAL</h5>
                     </TableCell>
-                    <TableCell className="acciones">
-                      <h5>ACCIONES</h5>
-                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -203,7 +200,7 @@ export default function HistorialTickets() {
                       <TableCell sx={{ fontSize: "15px" }} align="left">
                         {ticket?.importeFinal}
                       </TableCell>
-                      <TableHeaderCell>{buttonDelete(ticket)}</TableHeaderCell>
+                      
                     </TableRow>
                   ))}
                 </TableBody>
@@ -222,56 +219,4 @@ export default function HistorialTickets() {
   );
 }
 
-function buttonDelete(ticket) {
-  let button = (
-    <IconButton onClick={() => deleteTicketA(ticket.id)}>
-      <SvgComponentEliminar />
-    </IconButton>
-  );
 
-  return button;
-}
-
-function deleteTicketA(id) {
-  return Swal.fire({
-    title: "Atencion!",
-    text: "Está a punto de eliminar el ticket de la base de datos",
-    icon: "warning",
-    showCancelButton: true,
-    cancelButtonColor: "blue",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "red",
-    confirmButtonText: "Confirmar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteTicket(id);
-    }
-  });
-}
-
-function buttonEdit(ticket, navigate) {
-  let buttoon = (
-    <IconButton onClick={() => editarTicket(ticket.id, navigate)}>
-      <SvgComponentEditar />
-    </IconButton>
-  );
-  return buttoon;
-}
-
-function editarTicket(id, navigate) {
-  return Swal.fire({
-    title: "Atencion!",
-    text: "Está a punto de editar el ticket de la base de datos",
-    icon: "warning",
-    showCancelButton: true,
-    cancelButtonColor: "blue",
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: "red",
-    confirmButtonText: "Confirmar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      let url = `/editarTicket/${id}`;
-      return navigate(url);
-    }
-  });
-}

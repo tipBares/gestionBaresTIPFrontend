@@ -552,32 +552,8 @@ export default function FormTicket() {
           </div>
 		  
           <Button
-<<<<<<< Updated upstream
             onClick={() => {
               mostrarModalPdf();
-=======
-            onClick={function () {
-              Swal.fire({
-                title: "Desea finalizar el ticket ?",
-                text: "Seleccion la opción deseada",
-                icon: "warning",
-                showCancelButton: true,
-                cancelButtonColor: "#d33",
-                showDenyButton: true,
-                denyButtonText: "Guardar e imprimir",
-                denyButtonColor: "#2E3B55",
-                confirmButtonText: "Guardar",
-                confirmButtonColor: "#2E3B55",
-                cancelButtonText: "Cancelar",
-              }).then(function (result) {
-                if (result.value) {
-                  guardarTicket(idTicket);
-                } else if (result.isDenied) {			
-				  //guardarTicket(idTicket);
-				  {imprimirTicket()}
-				}					
-              });
->>>>>>> Stashed changes
             }}
             type="submit"
             variant="contained"
