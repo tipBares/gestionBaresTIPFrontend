@@ -1,19 +1,16 @@
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import {
   Alert,
-  Badge,
   Box,
   Button,
   ButtonGroup,
   Collapse,
-  createFilterOptions,
   FormControl,
   Grid,
   IconButton,
   MenuItem,
-  Pagination,
   Select,
   Table,
   TableBody,
@@ -27,9 +24,7 @@ import { styled } from "@mui/system";
 import BadgeUnstyled, { badgeUnstyledClasses } from "@mui/base/BadgeUnstyled";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import MailIcon from "@mui/icons-material/Mail";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
 import InputLabel from "@mui/material/InputLabel";
 import {
   SvgComponentAgregar,
@@ -41,8 +36,6 @@ import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import "./FormTicket.scss";
 import {
-  // createTicket,
-  // editTicket,
   getTicketById,
   createTicketProducto,
   updateMozoInTicket,
@@ -50,33 +43,24 @@ import {
   generarImporteTotal,
   updateMetodoDePago,
   deleteTicketProducto,
-  alertaAnimada,
   updateMesa,
   guardarTicket,
   cancelarTicket,
 } from "../../services/ticket-service";
+import { getCategoriasAll } from "../../services/categoria-service";
 import {
-  getCategorias,
-  getCategoriasAll,
-} from "../../services/categoria-service";
-import {
-  getProductoByName,
   getProductoByNameAll,
-  getProductos,
-  getProductoByCategoria,
   getProductoByCategoriaAll,
   getProductoById,
   getProductosAll,
-  deleteProducto,
 } from "../../services/producto_service";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Label, StepTitle, TableHeaderCell, TextArea } from "semantic-ui-react";
-import Typography from "@mui/material/Typography";
+import { Label, TableHeaderCell, TextArea } from "semantic-ui-react";
 import Modal from "@mui/material/Modal";
 import { getMesaById, getMesas } from "../../services/mesa-service";
-import { getMozos, getMozosAll } from "../../services/mozo-service";
-import ReactPDF, { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { getMozosAll } from "../../services/mozo-service";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import CrearPDF from "../CreatePDF/CreatePDF";
 
 const blue = {
@@ -87,11 +71,6 @@ const grey = {
   300: "#afb8c1",
   900: "#24292f",
 };
-
-// let notification = new Notification(StepTitle, createFilterOptions);
-// setTimeout(() => {
-//   notification.close();
-// }, 4000);
 
 const StyledBadge = styled(BadgeUnstyled)(
   ({ theme }) => `
@@ -150,18 +129,11 @@ const style = {
 };
 
 export default function FormTicket() {
-  //const { mesa } = props;
-  //cuenta la cantidad del producto a agregar
-  //const [count, setCount] = useState(1);
-  //meneja el modal
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  //modal para descuent/metodo de pago
   const [modalProductos, setModalProductos] = useState(true);
   const [modalPdf, setModalPdf] = useState(false);
-  //pruebo estados para un alerta de confirmacion
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
   const cerrarModal = () => {
     handleClose();
@@ -170,7 +142,6 @@ export default function FormTicket() {
   const mostrarModalProductos = () => {
     setModalProductos(true);
     setModalPdf(false);
-
     handleOpen();
   };
   const mostrarModalDetalles = () => {
@@ -184,31 +155,22 @@ export default function FormTicket() {
   };
 
   const [productos, setProductos] = useState([]);
-  const [productosInfo, setProductosInfo] = useState();
   const [nombre, setNombre] = useState("");
   const [precio, setPrecio] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [categoria, setCategoria] = useState(0);
   const navigate = useNavigate();
-  let { nombreFilter } = useParams();
   let { id } = useParams();
   const { register, handleSubmit, reset } = useForm();
   const [idTicket, setIdTicket] = useState();
   const [mesas, setMesas] = useState([]);
   const [mesa, setMesa] = useState({});
-  console.log("idTicket" + idTicket);
   const [idProducto, setIdProducto] = useState();
   const [cantidad, setCantidad] = useState(0);
   const [mozos, setMozos] = useState([]);
-
-  const [mozo, setMozo] = useState({ nombre: "", apellido: "", nick: "" });
-  console.log("const mozo 2", mozo);
+  const [mozo, setMozo] = useState("");
   const [ticket, setTicket] = useState({});
   const [descuento, setDescuento] = useState();
-  // borrar const verPDF
-  const [verPDF, setVerPDF] = useState(false);
-  // const [metodoDePago, setMetodoDePago] = useState ({Efectivo});
-
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const handleButtonClick = () => {
@@ -219,15 +181,7 @@ export default function FormTicket() {
     setIsAlertVisible(false);
   }, 3000);
 
-  //no se si va
-  console.log("const ticket 2", ticket);
-  const onSubmit = async () => {
-    // if (!id) {
-    //   createTicket({ nombre });
-    // } else {
-    //   editTicket(id, { nombre });
-    // }
-  };
+  const onSubmit = async () => {};
 
   const getData = async () => {
     const response = await getProductoById(idProducto);
@@ -236,11 +190,6 @@ export default function FormTicket() {
     setNombre(response.nombre);
     setPrecio(response.precio);
     setCategoria(response.categoria.id);
-  };
-  const getProductosByName = async () => {
-    const response = await getProductoByNameAll(nombre);
-    console.log("productos nombre: ", response);
-    setProductos(response);
   };
   const getCategoriasAux = async () => {
     const responseCategorias = getCategoriasAll();
@@ -259,13 +208,9 @@ export default function FormTicket() {
     setMesas(mesas);
   };
   const getDataMesa = async () => {
-    console.log(id, "HOLAAAAAAAAAAAYYOUGIUG");
     const response = await getMesaById(id);
-    console.log("SOY EL RESPONSE", response);
     setMesa(response);
     setIdTicket(response.ticket.id);
-    //setMozo(response.mozo);
-    console.log("ticket de la mesa: " + response);
     if (response.ticket.id) {
       getDataTicket();
     }
@@ -273,20 +218,8 @@ export default function FormTicket() {
   const getDataTicket = async () => {
     const response = await getTicketById(idTicket);
     setTicket(response);
-    console.log(
-      "tabla intermedia productos seteada: ",
-      response.ticketProductosDto
-    );
     setSelected(response.metodoDePago);
-    console.log("cambio el selected linea 233", response.metodoDePago);
-
-    console.log("const ticket ", ticket);
-    console.log("response data ticket: ", response);
     setMozo(response.mozo.id);
-
-    console.log("id auxiliar" + idTicket);
-    console.log("id ticket" + response.id);
-    console.log("SOY EL SELECTED YA SETEADO", selected);
   };
 
   useEffect(() => {
@@ -301,10 +234,8 @@ export default function FormTicket() {
   }, [id, idTicket]);
 
   const onSubmitTicketProducto = async () => {
-    console.log("cantidad on submit: " + cantidad);
     createTicketProducto({ idTicket, idProducto, cantidad });
     setCantidad(1);
-    setMostrarAlerta(true);
   };
 
   const handleChangeImporteTotal = async () => {
@@ -314,34 +245,17 @@ export default function FormTicket() {
 
   const handleChangeDescuento = async (event, value) => {
     setDescuento(event.target.value);
-    console.log(value);
-    console.log("holaaaaaaaaa" + descuento);
   };
 
   const handleDescuento = async (event) => {
     await applyDiscount(idTicket, descuento);
     getDataTicket();
-    console.log("PASO A APLICAR EL DESCUENTO");
-  };
-
-  const handleSubmitDescuento = (event) => {
-    // alert('A name was submitted: ' + this.state.value);
-    event.preventDefault();
   };
 
   const handleChangeMozo = async (event, value) => {
     setMozo(event.target.value);
-    console.log("paso handle change mozo 221: ", event.target.value);
     await updateMozoInTicket(idTicket, event.target.value);
-    console.log("mozoId nuevo: ", event.target.value);
-    // getDataTicket();
   };
-
-  // const optionsMozosPrueba() => {
-
-  // };
-
-  //metodo pago prueba
 
   const options = [
     { value: "Efectivo", text: "Efectivo" },
@@ -353,30 +267,8 @@ export default function FormTicket() {
   const [selected, setSelected] = useState("");
 
   const handleChangeMetodoDePago = async (event) => {
-    console.log(event.target.value);
     setSelected(event.target.value);
-    console.log("paso a cambiar el state linea 288");
     await updateMetodoDePago(idTicket, event.target.value);
-    // getDataTicket();
-  };
-
-  const handleChange = async (event, value) => {
-    if (nombre && nombre.length > 0) {
-      const productosDisponibles = await getProductoByName(nombre, value - 1);
-      setProductosInfo(productosDisponibles);
-      setProductos(productosDisponibles.content);
-    } else if (categoria !== 0) {
-      const productosDisponibles = await getProductoByCategoria(
-        categoria,
-        value - 1
-      );
-      setProductosInfo(productosDisponibles);
-      setProductos(productosDisponibles.content);
-    } else {
-      const productosDisponibles = await getProductos(value - 1);
-      setProductosInfo(productosDisponibles);
-      setProductos(productosDisponibles.content);
-    }
   };
 
   const handleBuscarNombre = async (event) => {
@@ -406,28 +298,9 @@ export default function FormTicket() {
     }
   };
 
-  const mostrarAlertaConfirmacionAuxiliar = () => {
-    Swal.fire({
-      title: "Creación exitosa",
-      icon: "success",
-      button: "Aceptar",
-    });
-  };
-
-  // const mostrarModalDetalles = () => {
-  //   setModalProductos(false);
-  //   handleOpen();
-  // };
-
-  const mesaSeleccionadaaaa = async (value) => {
-    console.log(value);
-
-    setMesa(mesas.find((mesa) => mesa.nroMesa == value));
-    // TODO ACA HAY QUE HACER LA PETICION A LA BASE DE DATOS
-    //estoy obteniendo todos los datos de la mesa
-    await updateMesa(idTicket, mesa.id);
-    console.log("id de mesa " + mesa.id);
-    console.log("id de tiket " + idTicket);
+  const mesaSeleccionada = async (value) => {
+    let mesaSelect = mesas.find((mesa) => mesa.nroMesa == value);
+    await updateMesa(idTicket, mesaSelect.id);
   };
 
   const Mesas = [];
@@ -436,32 +309,22 @@ export default function FormTicket() {
     console.log(Mesas);
   });
 
-  const imprimirTicket = async () => {
-	<PDFDownloadLink document={<CrearPDF ticket={ticket} />} fileName="ticket.pdf">
-		{({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-	</PDFDownloadLink>
-	  };
-
   return (
     <Stack style={{ marginTop: "100px" }} alignItems={"center"}>
       <div className="milky">{id ? "Editar Ticket" : "Nuevo Ticket"}</div>
       <Box width={"600px"} height={"auto"} component={Paper}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit()}>
           <div>
-            {/* terminar de conectar la peticion a mozos */}
             <FormControl sx={{ m: 1, minWidth: 80 }}>
               <InputLabel id="demo-simple-select-autowidth-label">
                 Mozo
               </InputLabel>
               <Select
-                //name="capturarMozo"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={mozo}
                 {...register("mozo")}
                 onChange={handleChangeMozo}
-
-                //label="Mozo"
               >
                 {mozos.map(({ nombre, id }) => (
                   <MenuItem key={id} value={id}>
@@ -471,9 +334,6 @@ export default function FormTicket() {
               </Select>
             </FormControl>
           </div>
-
-          {/* borrar hasta aca */}
-          {/* la tabla va a mostrar cantidad nombre precio unitario e importe */}
           <Button
             onClick={mostrarModalProductos}
             sx={{
@@ -499,11 +359,9 @@ export default function FormTicket() {
                 mostrarModalDetalles();
               }}
               sx={{
-                // mt: "10px",
-                // mb: "10px",
                 mr: "3px",
                 mb: "8px",
-                // right: "150px",
+
                 width: "290px",
                 borderRadius: "30px",
               }}
@@ -523,13 +381,13 @@ export default function FormTicket() {
                   title: "Desea cambiar de mesa ?",
                   text: "Seleccione la mesa",
                   input: "select",
-                  // showCancelButton: true,
+
                   inputOptions: {
                     Mesas,
                   },
                   inputValidator: (value) => {
                     return new Promise((resolve) => {
-                      mesaSeleccionadaaaa(Mesas[value]);
+                      mesaSeleccionada(Mesas[value]);
                       resolve();
                     });
                   },
@@ -550,7 +408,7 @@ export default function FormTicket() {
               </div>
             </Button>
           </div>
-		  
+
           <Button
             onClick={() => {
               mostrarModalPdf();
@@ -566,12 +424,10 @@ export default function FormTicket() {
               borderRadius: "30px",
             }}
             component={Paper}
-            //este boton abre un alert que tiene el boton guardar y otro guardar e imprimir  y ponerlos arriba de la tabla
           >
-            {/* {id ? "editar" : "crear"} */}
             finalizar
           </Button>
-		
+
           <Button
             onClick={function () {
               Swal.fire({
@@ -585,9 +441,7 @@ export default function FormTicket() {
                 confirmButtonColor: "#2E3B55",
                 cancelButtonText: "Cancelar",
               }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
-                  //aca va la peticion de cancelar mesa y pone en true la columna cancelado del backend
                   cancelarTicket(idTicket, id);
                 }
               });
@@ -605,7 +459,6 @@ export default function FormTicket() {
               borderRadius: "30px",
             }}
             component={Paper}
-            // onClick={() => navigate("/categorias")}//ESTE CANCELAR BORRA EL TICKET Y VUELVE AL SALON
           >
             Cancelar
           </Button>
@@ -613,8 +466,6 @@ export default function FormTicket() {
             height={"auto"}
             width={"auto"}
             open={open}
-            // overflow={"scroll"}
-            //onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
@@ -628,11 +479,7 @@ export default function FormTicket() {
                   <Grid item p={2} xs={2} sm={4} md={4}>
                     <Button
                       sx={{
-                        // mt: "1px",
-                        // mb: "50px",
-
                         alignContent: "center",
-
                         left: "190px",
                         width: "190px",
                         borderRadius: "30px",
@@ -649,21 +496,17 @@ export default function FormTicket() {
                     >
                       <Button
                         sx={{
-                          //alignItems: "center",
-                          //mb: "10px",
                           mt: "20px",
                           alignContent: "center",
                           left: "190px",
                           borderRadius: "30px",
                           width: "190px",
-                          //left: "95px",
                         }}
                         component={Paper}
                         onClick={async () => {
                           await guardarTicket(idTicket);
                           handleClose();
                         }}
-                        //onClick={async () => {await this.asyncFunc("Example");} }
                         variant="info"
                       >
                         Guardar e imprimir
@@ -676,10 +519,6 @@ export default function FormTicket() {
                       variant="contained"
                       sx={{
                         mt: "15px",
-                        //mb: "10px",
-                        // ml: "20px",
-                        // margin: "5px",
-                        // right: "-70px",
                         left: "190px",
                         alignContent: "center",
                         width: "190px",
@@ -721,25 +560,19 @@ export default function FormTicket() {
                     <TextField
                       label="Descuento %"
                       sx={{ width: 200 }}
-                      // className="descuento"
                       type={"text"}
                       onChange={handleChangeDescuento}
                       value={descuento}
                     ></TextField>
                     <Button
                       sx={{
-                        // mt: "20px",
-                        //mb: "-1px",
-                        // mr: "-120px",
                         left: "10px",
                         height: "50px",
                         width: "120px",
                         borderRadius: "10px",
                       }}
                       component={Paper}
-                      // className="aplicar"
                       type="submit"
-                      // variant="contained"
                       value="Submit"
                       onClick={handleDescuento}
                     >
@@ -791,12 +624,9 @@ export default function FormTicket() {
 
                     <Collapse in={isAlertVisible} sx={{ mt: "20px" }}>
                       <Alert
-                        sx={{ animationTimeline: "0s" }} //seguir con lo del timer que cierre solo el alaerta cuando haya tiempo
+                        sx={{ animationTimeline: "0s" }}
                         variant="filled"
                         severity="success"
-                        // onClose={() => {
-                        //   setMostrarAlerta(false);
-                        // }}
                       >
                         Se agregó correctamente el producto.
                       </Alert>
@@ -817,19 +647,15 @@ export default function FormTicket() {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        // className="right"
                         sx={{ width: 410 }}
                         required
                         {...register("categoria")}
                         onChange={handleBuscarCategoria}
-                        // placeholder="Categoria"
                         label="Categoria"
-                        // value={categoria}
                       >
                         {categorias.map(({ nombre, id }) => (
                           <MenuItem key={id} value={id}>
                             {`${nombre}`}
-                            {/* {<FontAwesomeIcon icon={icon} />} */}
                           </MenuItem>
                         ))}
                       </Select>
@@ -896,7 +722,6 @@ export default function FormTicket() {
                                     color: "action.active",
                                     display: "flex",
                                     flexDirection: "column",
-                                    // right: "10px",
                                     "& > *": {
                                       marginBottom: -2,
                                     },
@@ -980,23 +805,12 @@ export default function FormTicket() {
                                       handleClose
                                     >
                                       {isAlertVisible && (
-                                        <div className="alert-container">
-                                          {/* <div className="alert-inner">
-                                            Alert! Alert!
-                                          </div> */}
-                                        </div>
+                                        <div className="alert-container"></div>
                                       )}
                                       agregar
                                     </Button>
-                                    {/* <button onClick={handleButtonClick}>
-                                      Show alert
-                                    </button> */}
                                     {isAlertVisible && (
-                                      <div className="alert-container">
-                                        <div className="alert-inner">
-                                          Alert! Alert!
-                                        </div>
-                                      </div>
+                                      <div className="alert-container"></div>
                                     )}
                                   </div>
                                 </Box>
@@ -1007,12 +821,6 @@ export default function FormTicket() {
                       </Table>
                     </form>
                   </TableContainer>
-                  {/* <Pagination
-                  onChange={handleChange}
-                  shape="rounded"
-                  count={productosInfo?.totalPages}
-                  size="small"
-                /> */}
                 </div>
               )}
             </Box>

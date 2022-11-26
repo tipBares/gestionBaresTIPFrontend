@@ -13,8 +13,6 @@ import {
 } from "../../icons/abm";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
-
-//tabla basica
 import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -200,7 +198,6 @@ export default function HistorialTickets() {
                       <TableCell sx={{ fontSize: "15px" }} align="left">
                         {ticket?.importeFinal}
                       </TableCell>
-                      
                     </TableRow>
                   ))}
                 </TableBody>
@@ -218,5 +215,3 @@ export default function HistorialTickets() {
     </Stack>
   );
 }
-
-

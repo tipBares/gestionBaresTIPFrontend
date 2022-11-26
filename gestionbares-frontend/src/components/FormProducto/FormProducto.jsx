@@ -20,10 +20,7 @@ import {
   getProductoById,
 } from "../../services/producto_service";
 
-import {
-  getCategorias,
-  getCategoriasAll,
-} from "../../services/categoria-service";
+import { getCategoriasAll } from "../../services/categoria-service";
 
 export default function FormProducto(props) {
   let { id } = useParams();
