@@ -1,11 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-//import Buscador from "./components/BuscadorProducto/Buscador";
 import Mesa from "./components/Mesa";
 import Header from "./components/Header";
 import Mozo from "./components/Mozo";
-//import ProductoLista from "./components/ProductoLista";
 import ProductoLista from "./components/Producto";
 import FormProducto from "./components/FormProducto/";
 import FormMozo from "./components/FormMozo/FormMozo";
@@ -32,7 +30,6 @@ function App() {
           <Route path="/editarCategoria/:id" element={<FormCategoria />} />
           <Route path="/historialTickets" element={<HistorialTickets />} />
           <Route path="/abrirTicket" element={<FormTicket />} />
-
           <Route path="/abrirTicket/:id" element={<FormTicket />} />
         </Routes>
       </BrowserRouter>

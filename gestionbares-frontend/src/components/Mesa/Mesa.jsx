@@ -4,7 +4,6 @@ import { getMesas } from "../../services/mesa-service";
 import { Button, IconButton, Stack } from "@mui/material";
 import { Popup, Grid, Label } from "semantic-ui-react";
 import { SvgComponentMesa, SvgComponentMesaEnProceso } from "../../icons/abm";
-//import "./Mesa.scss";
 import { createTicket } from "../../services/ticket-service";
 import { nombreBar, direccionBar } from "../../services/datos-service";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,7 +14,7 @@ const gridStyles = {
 
 export default function ListMesas() {
   const { id } = useParams();
-  console.log("id normal" + id);
+  // console.log("id normal" + id);
   const navigate = useNavigate();
   const [mesas, setMesas] = useState([]);
   const [open, setOpen] = useState(false);
@@ -93,6 +92,6 @@ export default function ListMesas() {
 }
 
 function create(idMesa) {
-  console.log(idMesa, nombreBar, direccionBar);
+  // console.log(idMesa, nombreBar, direccionBar);
   createTicket({ idMesa, nombreBar, direccionBar });
 }

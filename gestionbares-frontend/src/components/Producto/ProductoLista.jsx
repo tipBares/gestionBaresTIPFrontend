@@ -17,7 +17,6 @@ import "./ProductoLista.scss";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
-//tabla basica
 import Pagination from "@mui/material/Pagination";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -47,7 +46,7 @@ export default function ProductoLista() {
   const [productosInfo, setProductosInfo] = useState();
   const [nombre, setNombre] = useState("");
   const [categorias, setCategorias] = useState([]);
-  const [categoria, setCategoria] = useState(0);
+  const [categoria, setCategoria] = useState("");
 
   const { register } = useForm();
 
@@ -86,7 +85,6 @@ export default function ProductoLista() {
       const productosDisponibles = await getProductos(value - 1);
       setProductos(productosDisponibles.content);
       setProductosInfo(productosDisponibles);
-      
     }
   };
 
@@ -145,14 +143,11 @@ export default function ProductoLista() {
               ),
             }}
           />
-
           <FormControl className="alinearder" sx={{ m: 1.4, width: 280 }}>
             <InputLabel id="demo-simple-select-label">
               Buscar por categoria
             </InputLabel>
             <Select
-              //sx={{ width: 280 }}
-              // placeholder="Type something here!"
               {...register("categoria")}
               onChange={handleBuscarCategoria}
               labelId="demo-simple-select-label"
@@ -165,16 +160,11 @@ export default function ProductoLista() {
               {categorias.map(({ nombre, id }) => (
                 <MenuItem key={id} value={id}>
                   {`${nombre}`}
-                  {/* {<FontAwesomeIcon icon={icon} />} */}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
-
-        {/* <Grid container>
-          <Grid item xs={6}>
-            <Grid item xs={6}> */}
         <div>
           <Button
             className="alinearder"
@@ -213,7 +203,6 @@ export default function ProductoLista() {
             </div>
           </Button>
         </div>
-        {/* </Grid> */}
         <TableContainer
           style={{ width: "600px", marginTop: "45px" }}
           component={Paper}
@@ -270,8 +259,6 @@ export default function ProductoLista() {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* </Grid>
-        </Grid> */}
         <Pagination
           onChange={handleChange}
           shape="rounded"

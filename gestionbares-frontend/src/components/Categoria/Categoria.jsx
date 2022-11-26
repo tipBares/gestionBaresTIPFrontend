@@ -27,7 +27,6 @@ import Grid from "@mui/material/Grid";
 
 export default function Categorias() {
   const navigate = useNavigate();
-
   const [categorias, setCategorias] = useState([]);
   const [categoriasInfo, setCategoriasInfo] = useState();
 
