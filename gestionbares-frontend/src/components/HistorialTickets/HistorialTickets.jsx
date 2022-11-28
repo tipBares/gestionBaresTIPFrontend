@@ -78,7 +78,6 @@ export default function HistorialTickets() {
   };
 
   const handleChange = async (event, value) => {
-    console.log("value: ", value);
     const ticketsDisponibles = await getTicket(value - 1);
     var ticketToProcess = generateDisplayDate(ticketsDisponibles.content);
     setTicketsInfo(ticketsDisponibles);

@@ -34,13 +34,11 @@ export default function Mozos() {
       const mozosDisponibles = await getMozos(0);
       setMozos(mozosDisponibles.content);
       setMozosInfo(mozosDisponibles);
-      console.log(mozosDisponibles);
     };
     getData();
   }, []);
 
   const handleChange = async (event, value) => {
-    console.log(value, "Soy el valor");
     const mozosDisponibles = await getMozos(value - 1);
     setMozos(mozosDisponibles.content);
     setMozosInfo(mozosDisponibles);
@@ -182,7 +180,6 @@ function editarMozo(id, navigate) {
     confirmButtonText: "Confirmar",
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log(id);
       let url = `/editarMozo/${id}`;
 
       return navigate(url);

@@ -43,7 +43,6 @@ export default function FormProducto(props) {
   useEffect(() => {
     const getData = async () => {
       const response = await getProductoById(id);
-      console.log(response);
       setNombre(response.nombre);
       setPrecio(response.precio);
       setDescripcion(response.descripcion);

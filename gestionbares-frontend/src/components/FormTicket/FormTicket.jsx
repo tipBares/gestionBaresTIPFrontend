@@ -185,8 +185,6 @@ export default function FormTicket() {
 
   const getData = async () => {
     const response = await getProductoById(idProducto);
-    console.log(response);
-    console.log(response.id);
     setNombre(response.nombre);
     setPrecio(response.precio);
     setCategoria(response.categoria.id);
@@ -306,7 +304,6 @@ export default function FormTicket() {
   const Mesas = [];
   mesas.map((option) => {
     Mesas.push(`${option.nroMesa}`);
-    console.log(Mesas);
   });
 
   return (
@@ -705,8 +702,6 @@ export default function FormTicket() {
                                 {...register("idProducto", {
                                   onChange: (event) => {
                                     setIdProducto(event.target.value);
-                                    console.log(event.target.value);
-                                    console.log(producto.id);
                                   },
                                 })}
                               >
@@ -750,10 +745,6 @@ export default function FormTicket() {
                                       value={cantidad}
                                       {...register("cantidad", {
                                         onChange: (event) => {
-                                          console.log(
-                                            "onchange cantidad: " +
-                                              event.target.value
-                                          );
                                           setCantidad(event.target.value);
                                         },
                                       })}
@@ -762,9 +753,6 @@ export default function FormTicket() {
                                         sx={{ right: 65 }}
                                         aria-label="reduce"
                                         onClick={() => {
-                                          console.log(
-                                            "cantidad remove: " + cantidad
-                                          );
                                           setIdProducto(producto.id);
                                           if (producto.id !== idProducto) {
                                             setCantidad(-1);
@@ -782,9 +770,6 @@ export default function FormTicket() {
                                         sx={{ right: 65 }}
                                         aria-label="increase"
                                         onClick={() => {
-                                          console.log(
-                                            "cantidad add: " + cantidad
-                                          );
                                           if (producto.id !== idProducto) {
                                             setCantidad(1);
                                             setIdProducto(producto.id);

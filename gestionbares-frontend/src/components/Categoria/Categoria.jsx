@@ -35,13 +35,11 @@ export default function Categorias() {
       const categoriasDisponibles = await getCategorias(0);
       setCategorias(categoriasDisponibles.content);
       setCategoriasInfo(categoriasDisponibles);
-      console.log(categoriasDisponibles);
     };
     getData();
   }, []);
 
   const handleChange = async (event, value) => {
-    console.log(value, "Soy el valor");
     const categoriasDisponibles = await getCategorias(value - 1);
     setCategorias(categoriasDisponibles.content);
     setCategoriasInfo(categoriasDisponibles);
@@ -169,7 +167,6 @@ function editarCategoria(id, navigate) {
     confirmButtonText: "Confirmar",
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log(id);
       let url = `/editarCategoria/${id}`;
 
       return navigate(url);

@@ -14,7 +14,6 @@ const gridStyles = {
 
 export default function ListMesas() {
   const { id } = useParams();
-  // console.log("id normal" + id);
   const navigate = useNavigate();
   const [mesas, setMesas] = useState([]);
   const [open, setOpen] = useState(false);
@@ -25,7 +24,6 @@ export default function ListMesas() {
     const getData = async () => {
       const mesasDisponibles = await getMesas();
       setMesas(mesasDisponibles);
-      console.log(mesasDisponibles);
     };
     getData();
   }, []);
@@ -38,7 +36,7 @@ export default function ListMesas() {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {mesas.map((mesa, index) => (
-          <Grid item p={2} xs={2} sm={4} md={4} key={index}>
+          <div item p={2} xs={2} sm={4} md={4} key={index}>
             <Popup
               content={mesas && mesa && mesa.nroMesa}
               on="click"
@@ -82,7 +80,7 @@ export default function ListMesas() {
                 ver ticket
               </Button>
             </Popup>
-          </Grid>
+          </div>
         ))}
       </Grid>
     </div>
