@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box, Button, Stack } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { TableHeaderCell } from "semantic-ui-react";
 import Pagination from "@mui/material/Pagination";
@@ -34,13 +34,11 @@ export default function Mozos() {
       const mozosDisponibles = await getMozos(0);
       setMozos(mozosDisponibles.content);
       setMozosInfo(mozosDisponibles);
-      console.log(mozosDisponibles);
     };
     getData();
   }, []);
 
   const handleChange = async (event, value) => {
-    console.log(value, "Soy el valor");
     const mozosDisponibles = await getMozos(value - 1);
     setMozos(mozosDisponibles.content);
     setMozosInfo(mozosDisponibles);
@@ -182,7 +180,6 @@ function editarMozo(id, navigate) {
     confirmButtonText: "Confirmar",
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log(id);
       let url = `/editarMozo/${id}`;
 
       return navigate(url);

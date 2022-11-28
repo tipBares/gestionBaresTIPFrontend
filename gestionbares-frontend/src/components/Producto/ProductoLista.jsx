@@ -59,8 +59,6 @@ export default function ProductoLista() {
     const productosDisponibles = await getProductos(0);
     setProductosInfo(productosDisponibles);
     setProductos(productosDisponibles.content);
-
-    console.log(productosDisponibles);
   };
 
   const getCategoriasAux = async () => {

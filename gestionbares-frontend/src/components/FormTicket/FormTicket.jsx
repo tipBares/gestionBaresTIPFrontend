@@ -56,7 +56,7 @@ import {
 } from "../../services/producto_service";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Label, TableHeaderCell, TextArea } from "semantic-ui-react";
+import { Label, TableHeaderCell } from "semantic-ui-react";
 import Modal from "@mui/material/Modal";
 import { getMesaById, getMesas } from "../../services/mesa-service";
 import { getMozosAll } from "../../services/mozo-service";
@@ -156,19 +156,17 @@ export default function FormTicket() {
 
   const [productos, setProductos] = useState([]);
   const [nombre, setNombre] = useState("");
-  const [precio, setPrecio] = useState("");
   const [categorias, setCategorias] = useState([]);
-  const [categoria, setCategoria] = useState(0);
   const navigate = useNavigate();
   let { id } = useParams();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const [idTicket, setIdTicket] = useState();
   const [mesas, setMesas] = useState([]);
   const [mesa, setMesa] = useState({});
   const [idProducto, setIdProducto] = useState();
   const [cantidad, setCantidad] = useState(0);
   const [mozos, setMozos] = useState([]);
-  const [mozo, setMozo] = useState("");
+  const [mozo, setMozo] = useState({ nombre: "", apellido: "", nick: "" });
   const [ticket, setTicket] = useState({});
   const [descuento, setDescuento] = useState();
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -181,15 +179,9 @@ export default function FormTicket() {
     setIsAlertVisible(false);
   }, 3000);
 
-  const onSubmit = async () => {};
-
   const getData = async () => {
     const response = await getProductoById(idProducto);
-    console.log(response);
-    console.log(response.id);
     setNombre(response.nombre);
-    setPrecio(response.precio);
-    setCategoria(response.categoria.id);
   };
   const getCategoriasAux = async () => {
     const responseCategorias = getCategoriasAll();
@@ -219,7 +211,7 @@ export default function FormTicket() {
     const response = await getTicketById(idTicket);
     setTicket(response);
     setSelected(response.metodoDePago);
-    setMozo(response.mozo.id);
+    setMozo(response?.mozo?.id);
   };
 
   useEffect(() => {
@@ -255,6 +247,7 @@ export default function FormTicket() {
   const handleChangeMozo = async (event, value) => {
     setMozo(event.target.value);
     await updateMozoInTicket(idTicket, event.target.value);
+    getDataTicket();
   };
 
   const options = [
@@ -286,13 +279,11 @@ export default function FormTicket() {
 
   const handleBuscarCategoria = async (event) => {
     if (event.target) {
-      setCategoria(event.target.value);
       const productosDisponibles = await getProductoByCategoriaAll(
         event.target.value
       );
       setProductos(productosDisponibles);
     } else {
-      setCategoria(0);
       const productosDisponibles = await getProductosAll();
       setProductos(productosDisponibles);
     }
@@ -306,7 +297,6 @@ export default function FormTicket() {
   const Mesas = [];
   mesas.map((option) => {
     Mesas.push(`${option.nroMesa}`);
-    console.log(Mesas);
   });
 
   return (
@@ -705,8 +695,6 @@ export default function FormTicket() {
                                 {...register("idProducto", {
                                   onChange: (event) => {
                                     setIdProducto(event.target.value);
-                                    console.log(event.target.value);
-                                    console.log(producto.id);
                                   },
                                 })}
                               >
@@ -723,7 +711,7 @@ export default function FormTicket() {
                                     display: "flex",
                                     flexDirection: "column",
                                     "& > *": {
-                                      marginBottom: -2,
+                                      marginBottom: 0,
                                     },
                                     [`& .${badgeUnstyledClasses.root}`]: {
                                       marginRight: 2,
@@ -750,10 +738,6 @@ export default function FormTicket() {
                                       value={cantidad}
                                       {...register("cantidad", {
                                         onChange: (event) => {
-                                          console.log(
-                                            "onchange cantidad: " +
-                                              event.target.value
-                                          );
                                           setCantidad(event.target.value);
                                         },
                                       })}
@@ -762,9 +746,6 @@ export default function FormTicket() {
                                         sx={{ right: 65 }}
                                         aria-label="reduce"
                                         onClick={() => {
-                                          console.log(
-                                            "cantidad remove: " + cantidad
-                                          );
                                           setIdProducto(producto.id);
                                           if (producto.id !== idProducto) {
                                             setCantidad(-1);
@@ -782,9 +763,6 @@ export default function FormTicket() {
                                         sx={{ right: 65 }}
                                         aria-label="increase"
                                         onClick={() => {
-                                          console.log(
-                                            "cantidad add: " + cantidad
-                                          );
                                           if (producto.id !== idProducto) {
                                             setCantidad(1);
                                             setIdProducto(producto.id);
@@ -801,7 +779,7 @@ export default function FormTicket() {
                                     <Button
                                       onClick={handleButtonClick}
                                       type="submit"
-                                      sx={{ right: -40, marginTop: -6 }}
+                                      sx={{ left: -50, marginTop: -1 }}
                                       handleClose
                                     >
                                       {isAlertVisible && (
@@ -877,7 +855,7 @@ export default function FormTicket() {
                   </TableCell>
                   <TableCell
                     sx={{ fontSize: "15px" }}
-                    align="left"
+                    align="right"
                     component="th"
                     scope="row"
                   >
