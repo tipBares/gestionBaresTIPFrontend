@@ -80,7 +80,7 @@ export default function Categorias() {
                       <h5>NOMBRE</h5>
                     </TableCell>
                     <TableCell className="acciones">
-                      <h5>ACCIONES</h5>
+                      <h5 align="right">ACCIONES</h5>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -98,7 +98,7 @@ export default function Categorias() {
                       >
                         {categoria.nombre}
                       </TableCell>
-                      <TableHeaderCell sx={{ left: "10px" }}>
+                      <TableHeaderCell align="right">
                         {buttonEdit(categoria, navigate)}
                         {buttonDelete(categoria)}
                       </TableHeaderCell>
