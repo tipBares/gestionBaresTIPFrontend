@@ -173,6 +173,8 @@ export default function FormTicket() {
 
   const handleButtonClick = () => {
     setIsAlertVisible(true);
+    handleChangeImporteTotal();
+    // getDataTicket();
   };
 
   setTimeout(() => {
@@ -232,7 +234,7 @@ export default function FormTicket() {
 
   const handleChangeImporteTotal = async () => {
     await generarImporteTotal(idTicket);
-    getDataTicket();
+    await getDataTicket();
   };
 
   const handleChangeDescuento = async (event, value) => {
@@ -400,8 +402,14 @@ export default function FormTicket() {
           </div>
 
           <Button
-            onClick={() => {
+            // onClick={() => {
+
+            //   //mostrarModalPdf();
+            // }}
+            onClick={async () => {
+              handleChangeImporteTotal();
               mostrarModalPdf();
+              //handleChangeImporteTotal();
             }}
             type="submit"
             variant="contained"
@@ -495,6 +503,7 @@ export default function FormTicket() {
                         component={Paper}
                         onClick={async () => {
                           await guardarTicket(idTicket);
+                          //handleChangeImporteTotal();
                           handleClose();
                         }}
                         variant="info"
