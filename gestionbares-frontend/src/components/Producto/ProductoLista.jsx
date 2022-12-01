@@ -72,7 +72,7 @@ export default function ProductoLista() {
       const productosDisponibles = await getProductoByName(nombre, value - 1);
       setProductos(productosDisponibles.content);
       setProductosInfo(productosDisponibles);
-    } else if (categoria !== 0) {
+    } else if (categoria !== 0 && categoria !== "") {
       const productosDisponibles = await getProductoByCategoria(
         categoria,
         value - 1
@@ -151,6 +151,7 @@ export default function ProductoLista() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={categoria}
+              label="BUscar por categoria"
             >
               <MenuItem disabled={"true"} value="">
                 Buscar por categoria

@@ -135,13 +135,13 @@ const CrearPDF = ({ ticket }) => {
             Metodo de pago: {ticket.metodoDePago}
           </Text>
           <Text style={{ fontSize: "18px", lineHeight: 1.5 }}>
-            Importe total: {ticket.importeTotal}
+            Importe total:$ {ticket.importeTotal}
           </Text>
           <Text style={{ fontSize: "18px", lineHeight: 1.5 }}>
-            Descuento: {ticket.descuento}
+            Descuento:% {ticket.descuento}
           </Text>
           <Text style={{ fontSize: "18px", lineHeight: 1.5 }}>
-            Importe final: {ticket.importeFinal}
+            Importe final:$ {ticket.importeFinal}
           </Text>
         </View>
       </Page>

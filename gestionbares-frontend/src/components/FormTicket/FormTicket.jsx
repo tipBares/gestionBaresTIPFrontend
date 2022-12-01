@@ -402,14 +402,9 @@ export default function FormTicket() {
           </div>
 
           <Button
-            // onClick={() => {
-
-            //   //mostrarModalPdf();
-            // }}
             onClick={async () => {
               handleChangeImporteTotal();
               mostrarModalPdf();
-              //handleChangeImporteTotal();
             }}
             type="submit"
             variant="contained"
